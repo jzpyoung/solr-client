@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    		http://www.springframework.org/schema/beans/spring-beans.xsd
+       		http://www.springframework.org/schema/context 
+     		http://www.springframework.org/schema/context/spring-context.xsd"
+	default-autowire="byName">
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.le.jr"/>
+
+	<!-- master，slave数据源组配置 -->
+	<bean id="solrServerGroup" class="com.le.jr.solr.rw.tools.datasource.SolrServerGroup"
+		destroy-method="destory">
+
+		<!-- master数据源配置 -->
+		<property name="masterServer">
+			<bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+				<constructor-arg>
+					<value>${solrmaster}</value>
+				</constructor-arg>
+				<property name="connectionTimeout" value="${solrmaster_connectiontimeout}" />
+				<property name="soTimeout" value="${solrmaster_soTimeout}" />
+			</bean>
+		</property>
+
+		<!-- slavelist数据源集合配置 -->
+		<property name="slaveServerList">
+
+			<list>
+				<!-- 随机策略，轮询策略数据源配置start -->
+				<!-- slave0数据源配置 -->
+				<bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+					<constructor-arg>
+						<value>${solrslave0}</value>
+					</constructor-arg>
+					<property name="connectionTimeout" value="${solrslave0_connectiontimeout}" />
+					<property name="soTimeout" value="${solrslave0_soTimeout}" />
+				</bean>
+				
+				<!-- slave1数据源配置 -->
+				<!-- <bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+					<constructor-arg>
+						<value>${solrslave1}</value>
+					</constructor-arg>
+					<property name="connectionTimeout" value="${solrslave1_connectiontimeout}" />
+					<property name="soTimeout" value="${solrslave1_soTimeout}" />
+				</bean> -->
+				<!-- 随机策略，轮询策略数据源配置end -->
+				
+				<!-- 权重策略数据源配置start -->
+				<!-- slave0数据源配置 -->
+				<!-- <bean id="weightSolrServer" class="com.le.jr.solr.rw.tools.datasource.WeightSolrServer">
+					<constructor-arg index="0">
+						<value>${solrslave0_weight}</value>
+					</constructor-arg>
+					<constructor-arg index="1">
+						<bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+							<constructor-arg>
+								<value>${solrslave0}</value>
+							</constructor-arg>
+							<property name="connectionTimeout" value="${solrslave0_connectiontimeout}" />
+							<property name="soTimeout" value="${solrslave0_soTimeout}" />
+						</bean>
+					</constructor-arg>
+				</bean> -->
+				<!-- slave1数据源配置 -->
+				<!-- <bean id="weightSolrServer" class="com.le.jr.solr.rw.tools.datasource.WeightSolrServer">
+					<constructor-arg index="0">
+						<value>${solrslave1_weight}</value>
+					</constructor-arg>
+					<constructor-arg index="1">
+						<bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+							<constructor-arg>
+								<value>${solrslave1}</value>
+							</constructor-arg>
+							<property name="connectionTimeout" value="${solrslave1_connectiontimeout}" />
+							<property name="soTimeout" value="${solrslave1_soTimeout}" />
+						</bean>
+					</constructor-arg>
+				</bean> -->
+				<!-- 权重策略数据源配置end -->
+			</list>
+		</property>
+
+		<!-- loadBalance策略类配置 -->
+		<property name="loadBalance">
+
+			<!-- 选用随机策略类配置 -->
+			<bean id="loadBalance"
+				class="com.le.jr.solr.rw.tools.loadstrategic.RandomLoadBalance">
+			</bean>
+			<!-- 选用轮询策略类配置 -->
+			<!-- <bean id="loadBalance"
+				class="com.le.jr.solr.rw.tools.loadstrategic.PollLoadBalance">
+			</bean> -->
+			<!-- 选用权重策略类配置 -->
+			<!-- <bean id="loadBalance"
+				class="com.le.jr.solr.rw.tools.loadstrategic.WeightLoadBalance">
+			</bean> -->
+
+		</property>
+
+	</bean>
+
+	<!-- 封装SolrServer的SolrHttpClient类配置 -->
+	<bean id="solrHttpClient" class="com.le.jr.solr.rw.tools.client.SolrHttpClient">
+		<property name="solrServerGroup" ref="solrServerGroup"></property>
+	</bean>
+
+
+</beans>
