@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * solr工具类
+ *
  * @author jiazhipeng
  * @version 1.0
  * @date 2016-04-11

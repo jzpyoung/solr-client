@@ -8,9 +8,10 @@ import com.le.jr.solr.client.datasource.WeightSolrServer;
 
 /**
  * 选取slave策略类实现:权重策略
- * 
- * @author jiazhipeng 
- * date 2016-3-30
+ *
+ * @author jiazhipeng
+ * @version 1.0
+ * @date 2016-03-30
  */
 public class WeightLoadBalance extends AbstractLoadBalance<WeightSolrServer> {
 

@@ -1,12 +1,10 @@
 package com.le.jr.solr.client.common;
 /** 
  * solr公共变量类
- * @author 作者 jiazhipeng 
- * @date 创建时间：2016年4月13日 上午11:21:26 
- * @version 1.0 
- * @parameter  
- * @since  
- * @return  
+ *
+ * @author jiazhipeng
+ * @version 1.0
+ * @date 2016-04-13
  */
 public class SolrConstant {
 

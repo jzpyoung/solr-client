@@ -6,12 +6,12 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
 
-
 /**
  * dao操作solr时的solrclient 接口
- * 
+ *
  * @author jiazhipeng
- * date 2016-3-30
+ * @version 1.0
+ * @date 2016-03-30
  */
 public interface SolrClient {
 	

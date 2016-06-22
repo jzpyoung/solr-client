@@ -3,11 +3,11 @@ package com.le.jr.solr.client.loadstrategic;
 import java.util.List;
 
 /**
- * 负载均衡策略类抽象类
- * 封装了slaveList.size为0，1时的特殊处理情况
- * 
+ * 负载均衡策略类抽象类(封装了slaveList.size为0，1时的特殊处理情况)
+ *
  * @author jiazhipeng
- * date 2016-3-30
+ * @version 1.0
+ * @date 2016-03-30
  */
 public abstract class AbstractLoadBalance<S> implements LoadBalance<S> {
 

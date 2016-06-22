@@ -12,12 +12,10 @@ import com.le.jr.solr.client.SolrClient;
 
 /**
  * solr查询 demo
- * @author 作者 jiazhipeng
- * @date 创建时间：2016年4月14日 下午11:03:15
+ *
+ * @author jiazhipeng
  * @version 1.0
- * @parameter
- * @since
- * @return
+ * @date 2016-04-14
  */
 public class QueryDemo {
 	

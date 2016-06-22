@@ -4,9 +4,10 @@ import java.util.List;
 
 /**
  * 负载均衡策略类接口
- * 
+ *
  * @author jiazhipeng
- * date 2016-3-30
+ * @version 1.0
+ * @date 2016-03-30
  */
 public interface LoadBalance<S> {
 	

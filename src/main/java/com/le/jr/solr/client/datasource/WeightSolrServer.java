@@ -19,9 +19,10 @@ import org.apache.solr.common.util.NamedList;
 
 /**
  * 扩展SolrServer类，适用于权重策略类（代理SolrServer类）
- * 
+ *
  * @author jiazhipeng
- * date 2016-3-30
+ * @version 1.0
+ * @date 2016-03-30
  */
 public class WeightSolrServer extends SolrServer{
 	

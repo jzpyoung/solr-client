@@ -7,12 +7,12 @@ import org.apache.solr.client.solrj.SolrServer;
 import com.le.jr.solr.client.loadstrategic.LoadBalance;
 import com.le.jr.solr.client.loadstrategic.RandomLoadBalance;
 
-
 /**
  * solr数据源类，包含一主多从
- * 
+ *
  * @author jiazhipeng
- * date 2016-3-30
+ * @version 1.0
+ * @date 2016-04-13
  */
 public class SolrServerGroup{
 	
