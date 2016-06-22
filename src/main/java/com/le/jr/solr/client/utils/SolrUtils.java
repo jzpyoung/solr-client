@@ -1,5 +1,6 @@
 package com.le.jr.solr.client.utils;
 
+import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.common.SolrConstant;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
@@ -11,11 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author 作者 jiazhipeng
+ * @author jiazhipeng
  * @version 1.0
- * @date 创建时间：2016年4月11日 下午4:47:56
- * @parameter
- * @return
+ * @date 2016-04-11
  */
 public class SolrUtils {
 
@@ -24,8 +23,8 @@ public class SolrUtils {
     /**
      * 把vo对象转换成SolrInputDocument
      *
-     * @param object
-     * @return
+     * @param object 待转换对象
+     * @return solr查询结果SolrInputDocument
      */
     public static SolrInputDocument Vo4Solrdoc(Object object) {
 
@@ -55,8 +54,8 @@ public class SolrUtils {
     /**
      * 把list<vo>转换成List<SolrInputDocument>
      *
-     * @param oList
-     * @return
+     * @param oList 待转换对象list
+     * @return solr查询结果List<SolrInputDocument>
      */
     public static List<SolrInputDocument> List4Solrdoclist(List<? extends Object> oList) {
 
@@ -77,8 +76,8 @@ public class SolrUtils {
     /**
      * 把对象属性和value转换成SolrQuery的query语法字符串
      *
-     * @param object
-     * @return
+     * @param object 待转换对象
+     * @return query语法字符串
      */
     public static String Vo4QueryStr(Object object) {
         int i = 0;
@@ -92,18 +91,18 @@ public class SolrUtils {
             try {
                 Object fValue = f.get(object);
 
-                if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers) || fValue == null) {
+                if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers) || fValue == null || f.isAnnotationPresent(IgnoreField.class)) {
                     continue;
                 }
 
-                if (i != 0 && !"endTime".equals(f.getName()) ) {
+                if (i != 0 && !"endTime".equals(f.getName())) {
                     str.append(" AND ");
                 }
-                if("startTime".equals(f.getName())){
-                    str.append("createTime" + ":[" + f.get(object)+" TO ");
-                }else if("endTime".equals(f.getName())){
-                    str.append( f.get(object)+"]");
-                }else{
+                if ("startTime".equals(f.getName())) {
+                    str.append("createTime" + ":[" + f.get(object) + " TO ");
+                } else if ("endTime".equals(f.getName())) {
+                    str.append(f.get(object) + "]");
+                } else {
                     str.append(f.getName() + ":" + f.get(object));
                 }
 
@@ -112,7 +111,6 @@ public class SolrUtils {
             }
             i++;
         }
-        System.out.println(str);
 
         if (i == 0) {
             return SolrConstant.queryStr;
@@ -120,6 +118,5 @@ public class SolrUtils {
 
         return str.toString();
     }
-
 
 }
