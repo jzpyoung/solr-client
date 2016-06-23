@@ -1,4 +1,4 @@
-package com.le.jr.solr.client.common.constants;
+package com.le.jr.solr.client.common;
 
 /**
  * solr公共变量类

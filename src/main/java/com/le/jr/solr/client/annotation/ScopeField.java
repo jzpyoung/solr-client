@@ -1,7 +1,5 @@
 package com.le.jr.solr.client.annotation;
 
-import com.le.jr.solr.client.common.enums.ScopeFiledEnum;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -21,5 +19,16 @@ public @interface ScopeField {
     String name() default "";
 
     ScopeFiledEnum mode() default ScopeFiledEnum.LT;
+
+    enum ScopeFiledEnum {
+        // 小于
+        LT,
+
+        // 大于
+        GT;
+
+        ScopeFiledEnum() {
+        }
+    }
 
 }

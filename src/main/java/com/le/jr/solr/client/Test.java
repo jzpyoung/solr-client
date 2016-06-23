@@ -2,7 +2,6 @@ package com.le.jr.solr.client;
 
 import com.le.jr.solr.client.annotation.PageField;
 import com.le.jr.solr.client.annotation.ScopeField;
-import com.le.jr.solr.client.common.enums.ScopeFiledEnum;
 
 import java.util.Date;
 
@@ -15,16 +14,16 @@ import java.util.Date;
  */
 public class Test {
 
-    @PageField(name=PageField.PageFiledEnum.PAGESIZE)
+    @PageField(name = PageField.PageFiledEnum.PAGESIZE)
     private int pageSize;
 
-    @PageField(name=PageField.PageFiledEnum.START)
+    @PageField(name = PageField.PageFiledEnum.START)
     private int start;
 
-    @ScopeField(name="createTime",mode= ScopeFiledEnum.GT)
+    @ScopeField(name = "createTime", mode = ScopeField.ScopeFiledEnum.GT)
     private Date startTime;
 
-    @ScopeField(name="createTime",mode= ScopeFiledEnum.LT)
+    @ScopeField(name = "createTime", mode = ScopeField.ScopeFiledEnum.LT)
     private Date endTime;
 
     private String letvUserId;
