@@ -15,10 +15,10 @@ import java.util.Date;
  */
 public class Test {
 
-    @PageField(name="pageSize")
+    @PageField(name=PageField.PageFiledEnum.PAGESIZE)
     private int pageSize;
 
-    @PageField(name="start")
+    @PageField(name=PageField.PageFiledEnum.START)
     private int start;
 
     @ScopeField(name="createTime",mode= ScopeFiledEnum.GT)

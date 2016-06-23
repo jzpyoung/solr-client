@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class SolrUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(SolrUtils.class);
+//    private static final Logger logger = LoggerFactory.getLogger(SolrUtils.class);
 
     /**
      * 把vo对象转换成SolrInputDocument
@@ -50,7 +50,7 @@ public class SolrUtils {
                 if (Modifier.isStatic(modifier) && Modifier.isFinal(modifier) || fValue == null) {
                     continue;
                 }
-                logger.info("实现vo到SolrInputDocument的转换结果{}:{}", f.getName(), fValue);
+//                logger.info("实现vo到SolrInputDocument的转换结果{}:{}", f.getName(), fValue);
                 solrdoc.addField(f.getName(), fValue);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -116,7 +116,7 @@ public class SolrUtils {
                 }
 
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+//                logger.error(e.getMessage(), e);
             }
             i++;
         }
@@ -156,17 +156,15 @@ public class SolrUtils {
 
 
                 if (f.isAnnotationPresent(PageField.class)) {
-                    if (PageFiledEnum.PAGESIZE.getValue().equals(f.getAnnotation(PageField.class).name())) {
+                    if (PageField.PageFiledEnum.PAGESIZE.equals(f.getAnnotation(PageField.class).name())) {
                         query.setRows((int) f.get(object));
                     }
-                    if (PageFiledEnum.START.getValue().equals(f.getAnnotation(PageField.class).name())) {
+                    if (PageField.PageFiledEnum.START.equals(f.getAnnotation(PageField.class).name())) {
                         query.setStart((int) f.get(object));
                     }
 
                 } else {
-                    if (i != 0 && !"endTime".equals(f.getName())) {
-                        str.append(" AND ");
-                    }
+
 
                     if (f.isAnnotationPresent(ScopeField.class)) {
                         if (ScopeFiledEnum.GT.getValue().equals(f.getAnnotation(ScopeField.class).mode().getValue())) {
@@ -175,16 +173,21 @@ public class SolrUtils {
                             str.append(f.get(object) + "]");
                         }
                     } else {
+
+                        if (i != 0) {
+                            str.append(" AND ");
+                        }
+
                         str.append(f.getName() + ":" + f.get(object));
                     }
+
+                    i++;
                 }
 
 
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+//                logger.error(e.getMessage(), e);
             }
-
-            i++;
 
         }
 

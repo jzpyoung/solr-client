@@ -16,6 +16,20 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PageField {
 
-    String name() default "";
+    PageFiledEnum name();
+
+    enum PageFiledEnum {
+        // 每页记录数
+        PAGESIZE,
+
+        // 起始值
+        START;
+
+        PageFiledEnum() {
+        }
+    }
 
 }
+
+
+
