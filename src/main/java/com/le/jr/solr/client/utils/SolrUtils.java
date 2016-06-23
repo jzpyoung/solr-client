@@ -5,12 +5,9 @@ import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.PageField;
 import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.common.constants.SolrConstant;
-import com.le.jr.solr.client.common.enums.PageFiledEnum;
 import com.le.jr.solr.client.common.enums.ScopeFiledEnum;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrInputDocument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -36,7 +33,6 @@ public class SolrUtils {
      * @return solr查询结果SolrInputDocument
      */
     public static SolrInputDocument Vo4Solrdoc(Object object) {
-
         SolrInputDocument solrdoc = new SolrInputDocument();
 
         Field[] fields = object.getClass().getDeclaredFields();
@@ -57,7 +53,6 @@ public class SolrUtils {
             }
         }
         return solrdoc;
-
     }
 
     /**
@@ -67,7 +62,6 @@ public class SolrUtils {
      * @return solr查询结果List<SolrInputDocument>
      */
     public static List<SolrInputDocument> List4Solrdoclist(List<? extends Object> oList) {
-
         if (oList != null && oList.size() > 0) {
             List<SolrInputDocument> list = new ArrayList<SolrInputDocument>();
             for (Object object : oList) {
@@ -75,11 +69,8 @@ public class SolrUtils {
                 list.add(solrdoc);
             }
             return list;
-
         }
-
         return null;
-
     }
 
     /**
@@ -136,7 +127,6 @@ public class SolrUtils {
      * @return SolrQuery
      */
     public static SolrQuery Vo4SolrQuery(Object object) {
-
         int i = 0;
         SolrQuery query = new SolrQuery();
         query.addField("*");
@@ -154,7 +144,6 @@ public class SolrUtils {
                     continue;
                 }
 
-
                 if (f.isAnnotationPresent(PageField.class)) {
                     if (PageField.PageFiledEnum.PAGESIZE.equals(f.getAnnotation(PageField.class).name())) {
                         query.setRows((int) f.get(object));
@@ -162,10 +151,7 @@ public class SolrUtils {
                     if (PageField.PageFiledEnum.START.equals(f.getAnnotation(PageField.class).name())) {
                         query.setStart((int) f.get(object));
                     }
-
                 } else {
-
-
                     if (f.isAnnotationPresent(ScopeField.class)) {
                         if (ScopeFiledEnum.GT.getValue().equals(f.getAnnotation(ScopeField.class).mode().getValue())) {
                             str.append(f.getAnnotation(ScopeField.class).name() + ":[" + f.get(object) + " TO ");
@@ -183,12 +169,9 @@ public class SolrUtils {
 
                     i++;
                 }
-
-
             } catch (Exception e) {
 //                logger.error(e.getMessage(), e);
             }
-
         }
 
         if (i == 0) {
@@ -196,8 +179,6 @@ public class SolrUtils {
         } else {
             query.setQuery(str.toString());
         }
-
-
         return query;
     }
 
