@@ -58,7 +58,6 @@ public class SolrHttpClient implements SolrClient {
         }
 
         return Boolean.TRUE;
-
     }
 
     @Override
@@ -66,7 +65,6 @@ public class SolrHttpClient implements SolrClient {
 
         SolrServer masterServer = solrServerGroup.getMasterServer();
 
-        boolean submitFlag = true;
         try {
 
             // 提交索引
@@ -86,13 +84,11 @@ public class SolrHttpClient implements SolrClient {
             if (res.getQTime() > 300) {
                 logger.warn("addMultipleIndex 提交索引耗时：" + res.getQTime());
             }
-            submitFlag = true;
 
         } catch (Exception e) {
             throw new RuntimeException("批量索引异常!size:" + documents.size(), e);
         }
-        return submitFlag;
-
+        return Boolean.TRUE;
     }
 
     @Override
@@ -100,7 +96,7 @@ public class SolrHttpClient implements SolrClient {
 
         // 根据配置文件策略选取slave dataSource
         SolrServer slaveServer = solrServerGroup.getSlaveServer();
-        QueryResponse res = null;
+        QueryResponse res;
 
         try {
             // 执行查询
@@ -110,17 +106,13 @@ public class SolrHttpClient implements SolrClient {
         } catch (Exception e) {
             throw new RuntimeException("查询索引列表异常!", e);
         }
-
     }
 
     @Override
     public boolean delete(String sq) {
-
-        boolean submitFlag = true;
-
         // 根据配置文件策略选取slave dataSource
         SolrServer masterServer = solrServerGroup.getMasterServer();
-        UpdateResponse res = null;
+        UpdateResponse res;
 
         try {
 
@@ -140,13 +132,11 @@ public class SolrHttpClient implements SolrClient {
             if (res.getQTime() > 300) {
                 logger.warn("delete 删除索引耗时：" + res.getQTime());
             }
-            submitFlag = true;
 
         } catch (Exception e) {
             throw new RuntimeException("删除索引列表异常!", e);
         }
-        return submitFlag;
-
+        return Boolean.TRUE;
     }
 
     @Override
