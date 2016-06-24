@@ -151,26 +151,23 @@ public class SolrHttpClient implements SolrClient {
 
     @Override
     public Long sum(String field, AggregationEnum agg, SolrQuery sq) {
+        // 利用StatsComponent实现数据库的聚合统计查询，也就是min、max、avg、count、sum的功能
 
-        /**
-         * 利用StatsComponent实现数据库的聚合统计查询，也就是min、max、avg、count、sum的功能
-         */
-        //是否开启stats（true/false）
+        // 是否开启stats（true/false）
         sq.set("stats", true);
-        //添加一个字段来统计，可以有多个(求和字段)
+        // 添加一个字段来统计，可以有多个(求和字段)
         sq.set("stats.field", field);
-        //执行查询
+        // 执行查询
         QueryResponse res = this.query(sq);
-        //获取执行结果
+        // 获取执行结果
         Map<String, FieldStatsInfo> fieldStatsInfoMap = res.getFieldStatsInfo();
-        //stats.field字段设置成什么，这里就获取什么
+        // stats.field字段设置成什么，这里就获取什么
         FieldStatsInfo fieldStatsInfo = fieldStatsInfoMap.get(field);
         String aggStr = null;
-        //获取sum值，并转换成long
+        // 获取sum值，并转换成long
         if (AggregationEnum.SUM.equals(agg)) {
             aggStr = fieldStatsInfo.getSum().toString();
         }
-
         Long result = Double.valueOf(aggStr).longValue();
         return result;
     }
