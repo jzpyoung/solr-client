@@ -20,12 +20,12 @@ import com.le.jr.solr.client.SolrClient;
 public class QueryDemo {
 	
 	@Resource
-	private SolrClient solrHttpClient;
+	private static SolrClient solrHttpClient;
 
 	/**
 	 * sum4demo
 	 */
-	public Long sum4demo() {
+	public static Long sum4demo() {
 		SolrQuery sq = new SolrQuery();
 		//查询条件，*:*代表查询所有数据
 		String query = "*:*";
@@ -51,6 +51,10 @@ public class QueryDemo {
 		String sumStr = fieldStatsInfo.getSum().toString();
 		Long sum= Double.valueOf(sumStr).longValue();
 		return sum;
+	}
+
+	public static void main(String[] args) {
+		sum4demo();
 	}
 
 }

@@ -1,15 +1,17 @@
 package com.le.jr.solr.client;
 
-import java.util.List;
-
+import com.le.jr.solr.client.common.enums.AggregationEnum;
+import com.le.jr.solr.client.datasource.SolrServerGroup;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.response.FieldStatsInfo;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.le.jr.solr.client.datasource.SolrServerGroup;
+import java.util.List;
+import java.util.Map;
 
 /**
  * SolrClient的实现SolrHttpClient solr连接客户端，封装了solrserver的 add query方法
@@ -145,6 +147,32 @@ public class SolrHttpClient implements SolrClient {
         }
         return submitFlag;
 
+    }
+
+    @Override
+    public Long sum(String field, AggregationEnum agg, SolrQuery sq) {
+
+        /**
+         * 利用StatsComponent实现数据库的聚合统计查询，也就是min、max、avg、count、sum的功能
+         */
+        //是否开启stats（true/false）
+        sq.set("stats", true);
+        //添加一个字段来统计，可以有多个(求和字段)
+        sq.set("stats.field", field);
+        //执行查询
+        QueryResponse res = this.query(sq);
+        //获取执行结果
+        Map<String, FieldStatsInfo> fieldStatsInfoMap = res.getFieldStatsInfo();
+        //stats.field字段设置成什么，这里就获取什么
+        FieldStatsInfo fieldStatsInfo = fieldStatsInfoMap.get(field);
+        String aggStr = null;
+        //获取sum值，并转换成long
+        if (AggregationEnum.SUM.equals(agg)) {
+            aggStr = fieldStatsInfo.getSum().toString();
+        }
+
+        Long result = Double.valueOf(aggStr).longValue();
+        return result;
     }
 
     /**
