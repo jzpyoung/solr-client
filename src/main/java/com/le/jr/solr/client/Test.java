@@ -1,12 +1,13 @@
 package com.le.jr.solr.client;
 
+import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.PageField;
 import com.le.jr.solr.client.annotation.ScopeField;
 
 import java.util.Date;
 
 /**
- * TODO
+ * VO demo
  *
  * @author jiazhipeng
  * @version 1.0
@@ -26,7 +27,10 @@ public class Test {
     @ScopeField(name = "createTime", mode = ScopeField.ScopeFiledEnum.LT)
     private Date endTime;
 
+    @IgnoreField
     private String letvUserId;
+
+    private String name;
 
     public int getPageSize() {
         return pageSize;
@@ -66,5 +70,25 @@ public class Test {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Test{" +
+                "pageSize=" + pageSize +
+                ", start=" + start +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", letvUserId='" + letvUserId + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

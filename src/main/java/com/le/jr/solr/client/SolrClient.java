@@ -33,12 +33,21 @@ public interface SolrClient {
     boolean addMulti(List<SolrInputDocument> documents);
 
     /**
-     * 根据查询条件sq查询出结果QueryResponse
+     * 查询(返回值为solr原生返回值QueryResponse)
      *
      * @param sq 查询条件
      * @return 查询结果
      */
     QueryResponse query(SolrQuery sq);
+
+    /**
+     * 查询(返回值为传入clazz的list)
+     *
+     * @param queryObj 查询条件对象
+     * @param clazz    结果集合对象class
+     * @return 查询结果
+     */
+    <T> List<T> query(Object queryObj, Class<T> clazz);
 
     /**
      * 根据查询条件sq删除索引,sq必须符合solr语法
@@ -49,13 +58,13 @@ public interface SolrClient {
     boolean delete(String sq);
 
     /**
-     * 根据查询条件查询出的记录按照指定字段sum
+     * 聚合(min、max、avg、count、sum)目前只支持sum
      *
      * @param field 需要sum的字段
      * @param agg   聚合操作枚举
      * @param sq    查询条件
      * @return sum的结果
      */
-    Long sum(String field, AggregationEnum agg, SolrQuery sq);
+    Long aggregation(String field, AggregationEnum agg, SolrQuery sq);
 
 }

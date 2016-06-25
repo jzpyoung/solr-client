@@ -1,5 +1,11 @@
 package com.le.jr.solr.client.utils;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.internal.Primitives;
+import com.google.gson.reflect.TypeToken;
 import com.le.jr.solr.client.Test;
 import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.PageField;
@@ -7,10 +13,13 @@ import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.common.SolrConstant;
 import com.le.jr.solr.client.exceptions.SolrException;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -121,7 +130,7 @@ public class SolrUtils {
                                 c.setTime((Date) f.get(object));
                                 c.add(Calendar.HOUR, -8);
                                 str.append(f.getAnnotation(ScopeField.class).name() + ":[" + dateFormat.format(c.getTime()) + " TO ");
-                            }else{
+                            } else {
                                 str.append(f.getAnnotation(ScopeField.class).name() + ":[" + f.get(object) + " TO ");
                             }
 
@@ -131,7 +140,7 @@ public class SolrUtils {
                                 c.setTime((Date) f.get(object));
                                 c.add(Calendar.HOUR, -8);
                                 str.append(dateFormat.format(c.getTime()) + "]");
-                            }else{
+                            } else {
                                 str.append(f.get(object) + "]");
                             }
                             scopeTime++;
@@ -158,14 +167,27 @@ public class SolrUtils {
         return query;
     }
 
+    /**
+     * 把QueryResponse转换成List<VO>
+     *
+     * @param docList 待转换查询结果
+     * @param cls     转换目标类型
+     * @return 转换结果List<VO>
+     */
+    public static <T> List<T> queryResponse4List(SolrDocumentList docList, Class<T> cls) {
+        String listJson = Gsons.toJson(docList);
+        return  Gsons.fromJson2List(listJson,cls);
+    }
+
     public static void main(String[] args) {
-        Test b = new Test();
-        b.setPageSize(5);
-        b.setStart(3);
-        b.setLetvUserId("223");
-        b.setStartTime(new Date());
-        b.setEndTime(new Date());
-        System.out.println(SolrUtils.Vo4SolrQuery(b));
+        SolrDocumentList list = new SolrDocumentList();
+        SolrDocument doc  = new SolrDocument();
+        doc.setField("name","jzp");
+        list.add(doc);
+        List<Test> result = SolrUtils.queryResponse4List(list, Test.class);
+        for(Test r:result){
+            System.out.println(r.toString());
+        }
     }
 
 }

@@ -2,12 +2,14 @@ package com.le.jr.solr.client;
 
 import com.le.jr.solr.client.common.enums.AggregationEnum;
 import com.le.jr.solr.client.datasource.SolrServerGroup;
+import com.le.jr.solr.client.utils.SolrUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.FieldStatsInfo;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
 import java.util.List;
@@ -109,6 +111,26 @@ public class SolrHttpClient implements SolrClient {
     }
 
     @Override
+    public <T> List<T> query(Object queryObj, Class<T> clazz) {
+        // 根据配置文件策略选取slave dataSource
+        SolrServer slaveServer = solrServerGroup.getSlaveServer();
+        // 把传入对象转换成SolrQuery
+        SolrQuery solrQuery = SolrUtils.Vo4SolrQuery(queryObj);
+
+        QueryResponse res;
+        SolrDocumentList sdl;
+        try {
+            // 执行查询
+            res = slaveServer.query(solrQuery);
+            sdl = res.getResults();
+
+            return SolrUtils.queryResponse4List(sdl, clazz);
+        } catch (Exception e) {
+            throw new RuntimeException("查询索引列表异常!", e);
+        }
+    }
+
+    @Override
     public boolean delete(String sq) {
         // 根据配置文件策略选取slave dataSource
         SolrServer masterServer = solrServerGroup.getMasterServer();
@@ -140,7 +162,7 @@ public class SolrHttpClient implements SolrClient {
     }
 
     @Override
-    public Long sum(String field, AggregationEnum agg, SolrQuery sq) {
+    public Long aggregation(String field, AggregationEnum agg, SolrQuery sq) {
         // 利用StatsComponent实现数据库的聚合统计查询，也就是min、max、avg、count、sum的功能
 
         // 是否开启stats（true/false）
