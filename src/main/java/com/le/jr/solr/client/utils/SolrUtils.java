@@ -1,25 +1,16 @@
 package com.le.jr.solr.client.utils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.internal.Primitives;
-import com.google.gson.reflect.TypeToken;
-import com.le.jr.solr.client.Test;
 import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.PageField;
 import com.le.jr.solr.client.annotation.ScopeField;
-import com.le.jr.solr.client.common.SolrConstant;
+import com.le.jr.solr.client.common.constant.SolrConstant;
 import com.le.jr.solr.client.exceptions.SolrException;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,7 +35,7 @@ public class SolrUtils {
      * @param object 待转换对象
      * @return solr查询结果SolrInputDocument
      */
-    public static SolrInputDocument Vo4Solrdoc(Object object) {
+    public static SolrInputDocument vo2Solrdoc(Object object) {
         SolrInputDocument solrdoc = new SolrInputDocument();
 
         Field[] fields = object.getClass().getDeclaredFields();
@@ -72,11 +63,11 @@ public class SolrUtils {
      * @param oList 待转换对象list
      * @return solr查询结果List<SolrInputDocument>
      */
-    public static List<SolrInputDocument> List4Solrdoclist(List<? extends Object> oList) {
+    public static List<SolrInputDocument> list2Solrdoclist(List<? extends Object> oList) {
         if (oList != null && oList.size() > 0) {
-            List<SolrInputDocument> list = new ArrayList<SolrInputDocument>();
+            List<SolrInputDocument> list = new ArrayList<>();
             for (Object object : oList) {
-                SolrInputDocument solrdoc = Vo4Solrdoc(object);
+                SolrInputDocument solrdoc = vo2Solrdoc(object);
                 list.add(solrdoc);
             }
             return list;
@@ -90,11 +81,11 @@ public class SolrUtils {
      * @param object 待转换对象
      * @return SolrQuery
      */
-    public static SolrQuery Vo4SolrQuery(Object object) {
+    public static SolrQuery vo2SolrQuery(Object object) {
         int i = 0;
         int scopeTime = 0;
         SolrQuery query = new SolrQuery();
-        query.addField("*");
+        query.addField(SolrConstant.star);
 
         StringBuffer str = new StringBuffer();
 
@@ -123,34 +114,34 @@ public class SolrUtils {
                     if (f.isAnnotationPresent(ScopeField.class)) {
                         if (ScopeField.ScopeFiledEnum.GT.equals(f.getAnnotation(ScopeField.class).mode())) {
                             if (scopeTime != 0) {
-                                str.append(" AND ");
+                                str.append(SolrConstant.andStr);
                             }
-                            if (f.getGenericType().toString().equals("class java.util.Date")) {
+                            if (f.getGenericType().toString().equals(SolrConstant.dateStr)) {
                                 Calendar c = Calendar.getInstance();
                                 c.setTime((Date) f.get(object));
                                 c.add(Calendar.HOUR, -8);
-                                str.append(f.getAnnotation(ScopeField.class).name() + ":[" + dateFormat.format(c.getTime()) + " TO ");
+                                str.append(f.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft + dateFormat.format(c.getTime()) + SolrConstant.toStr);
                             } else {
-                                str.append(f.getAnnotation(ScopeField.class).name() + ":[" + f.get(object) + " TO ");
+                                str.append(f.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft + f.get(object) + SolrConstant.toStr);
                             }
 
                         } else if (ScopeField.ScopeFiledEnum.LT.equals(f.getAnnotation(ScopeField.class).mode())) {
-                            if (f.getGenericType().toString().equals("class java.util.Date")) {
+                            if (f.getGenericType().toString().equals(SolrConstant.dateStr)) {
                                 Calendar c = Calendar.getInstance();
                                 c.setTime((Date) f.get(object));
                                 c.add(Calendar.HOUR, -8);
-                                str.append(dateFormat.format(c.getTime()) + "]");
+                                str.append(dateFormat.format(c.getTime()) + SolrConstant.bracketRight);
                             } else {
-                                str.append(f.get(object) + "]");
+                                str.append(f.get(object) + SolrConstant.bracketRight);
                             }
                             scopeTime++;
                         }
                     } else {
                         // 没有被任何注解标识的普通属性设置进SolrQuery
                         if (i != 0) {
-                            str.append(" AND ");
+                            str.append(SolrConstant.andStr);
                         }
-                        str.append(f.getName() + ":" + f.get(object));
+                        str.append(f.getName() + SolrConstant.colon + f.get(object));
                     }
                     i++;
                 }
@@ -174,20 +165,9 @@ public class SolrUtils {
      * @param cls     转换目标类型
      * @return 转换结果List<VO>
      */
-    public static <T> List<T> queryResponse4List(SolrDocumentList docList, Class<T> cls) {
+    public static <T> List<T> queryResponse2List(SolrDocumentList docList, Class<T> cls) {
         String listJson = Gsons.toJson(docList);
-        return  Gsons.fromJson2List(listJson,cls);
-    }
-
-    public static void main(String[] args) {
-        SolrDocumentList list = new SolrDocumentList();
-        SolrDocument doc  = new SolrDocument();
-        doc.setField("name","jzp");
-        list.add(doc);
-        List<Test> result = SolrUtils.queryResponse4List(list, Test.class);
-        for(Test r:result){
-            System.out.println(r.toString());
-        }
+        return Gsons.fromJson2List(listJson, cls);
     }
 
 }

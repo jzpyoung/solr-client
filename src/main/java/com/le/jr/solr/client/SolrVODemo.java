@@ -13,7 +13,7 @@ import java.util.Date;
  * @version 1.0
  * @date 2016-06-23
  */
-public class Test {
+public class SolrVoDemo {
 
     @PageField(name = PageField.PageFiledEnum.PAGESIZE)
     private int pageSize;
@@ -82,7 +82,7 @@ public class Test {
 
     @Override
     public String toString() {
-        return "Test{" +
+        return "SolrVoDemo{" +
                 "pageSize=" + pageSize +
                 ", start=" + start +
                 ", startTime=" + startTime +

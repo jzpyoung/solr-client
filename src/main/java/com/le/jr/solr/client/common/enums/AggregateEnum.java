@@ -7,7 +7,7 @@ package com.le.jr.solr.client.common.enums;
  * @version 1.0
  * @date 2016-06-24
  */
-public enum AggregationEnum {
+public enum AggregateEnum {
 
     SUM
 

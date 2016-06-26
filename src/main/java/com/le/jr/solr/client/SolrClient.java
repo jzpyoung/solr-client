@@ -1,14 +1,15 @@
 package com.le.jr.solr.client;
 
-import com.le.jr.solr.client.common.enums.AggregationEnum;
+import com.le.jr.solr.client.common.enums.AggregateEnum;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * dao操作solr时的solrclient 接口
+ * SolrClient
  *
  * @author jiazhipeng
  * @version 1.0
@@ -17,20 +18,36 @@ import java.util.List;
 public interface SolrClient {
 
     /**
-     * 增加单条索引数据
+     * 增加单条索引数据(document)
      *
-     * @param document
+     * @param document 待添加文档
      * @return 操作是否成功
      */
     boolean addSingle(SolrInputDocument document);
 
     /**
-     * 增加多条索引数据
+     * 增加单条索引数据(vo)
      *
-     * @param documents 文档集合
+     * @param object 待添加对象
+     * @return 操作是否成功
+     */
+    boolean addSingle(Object object);
+
+    /**
+     * 增加多条索引数据(documents)
+     *
+     * @param documents 待添加文档集合
      * @return 操作是否成功
      */
     boolean addMulti(List<SolrInputDocument> documents);
+
+    /**
+     * 根据查询条件sq删除索引,sq必须符合solr语法
+     *
+     * @param sq 查询条件
+     * @return 操作是否成功
+     */
+    boolean delete(String sq);
 
     /**
      * 查询(返回值为solr原生返回值QueryResponse)
@@ -50,21 +67,39 @@ public interface SolrClient {
     <T> List<T> query(Object queryObj, Class<T> clazz);
 
     /**
-     * 根据查询条件sq删除索引,sq必须符合solr语法
+     * 查询count
      *
-     * @param sq 查询条件
-     * @return 操作是否成功
+     * @param solrQuery 查询条件
+     * @return count
      */
-    boolean delete(String sq);
+    Long count(SolrQuery solrQuery);
+
+    /**
+     * 查询count
+     *
+     * @param object 查询条件对象
+     * @return count
+     */
+    Long count(Object object);
 
     /**
      * 聚合(min、max、avg、count、sum)目前只支持sum
      *
-     * @param field 需要sum的字段
-     * @param agg   聚合操作枚举
-     * @param sq    查询条件
+     * @param agg    聚合操作枚举
+     * @param sq     查询条件
+     * @param fields 待聚合字段
      * @return sum的结果
      */
-    Long aggregation(String field, AggregationEnum agg, SolrQuery sq);
+    Map<String, Long> aggregate(AggregateEnum agg, SolrQuery sq, String... fields);
+
+    /**
+     * 聚合(min、max、avg、count、sum)目前只支持sum
+     *
+     * @param agg    聚合操作枚举
+     * @param object 查询条件对象
+     * @param fields 待聚合字段
+     * @return sum的结果
+     */
+    Map<String, Long> aggregate(AggregateEnum agg, Object object, String... fields);
 
 }

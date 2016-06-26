@@ -1,7 +1,9 @@
 package com.le.jr.solr.client;
 
-import com.le.jr.solr.client.common.enums.AggregationEnum;
+import com.le.jr.solr.client.common.code.ExceptionCode;
+import com.le.jr.solr.client.common.enums.AggregateEnum;
 import com.le.jr.solr.client.datasource.SolrServerGroup;
+import com.le.jr.solr.client.exceptions.SolrException;
 import com.le.jr.solr.client.utils.SolrUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -12,11 +14,12 @@ import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * SolrClient的实现SolrHttpClient solr连接客户端，封装了solrserver的 add query方法
+ * SolrClient 实现
  *
  * @author jiazhipeng
  * @version 1.0
@@ -33,7 +36,6 @@ public class SolrHttpClient implements SolrClient {
 
     @Override
     public boolean addSingle(SolrInputDocument document) {
-
         SolrServer masterServer = solrServerGroup.getMasterServer();
 
         try {
@@ -63,8 +65,13 @@ public class SolrHttpClient implements SolrClient {
     }
 
     @Override
-    public boolean addMulti(List<SolrInputDocument> documents) {
+    public boolean addSingle(Object object) {
+        SolrInputDocument solrInputDocument = SolrUtils.vo2Solrdoc(object);
+        return this.addSingle(solrInputDocument);
+    }
 
+    @Override
+    public boolean addMulti(List<SolrInputDocument> documents) {
         SolrServer masterServer = solrServerGroup.getMasterServer();
 
         try {
@@ -95,7 +102,6 @@ public class SolrHttpClient implements SolrClient {
 
     @Override
     public QueryResponse query(SolrQuery sq) {
-
         // 根据配置文件策略选取slave dataSource
         SolrServer slaveServer = solrServerGroup.getSlaveServer();
         QueryResponse res;
@@ -112,22 +118,30 @@ public class SolrHttpClient implements SolrClient {
 
     @Override
     public <T> List<T> query(Object queryObj, Class<T> clazz) {
-        // 根据配置文件策略选取slave dataSource
-        SolrServer slaveServer = solrServerGroup.getSlaveServer();
         // 把传入对象转换成SolrQuery
-        SolrQuery solrQuery = SolrUtils.Vo4SolrQuery(queryObj);
+        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(queryObj);
 
-        QueryResponse res;
+        QueryResponse res = this.query(solrQuery);
         SolrDocumentList sdl;
         try {
-            // 执行查询
-            res = slaveServer.query(solrQuery);
             sdl = res.getResults();
-
-            return SolrUtils.queryResponse4List(sdl, clazz);
+            return SolrUtils.queryResponse2List(sdl, clazz);
         } catch (Exception e) {
             throw new RuntimeException("查询索引列表异常!", e);
         }
+    }
+
+    @Override
+    public Long count(SolrQuery solrQuery) {
+        QueryResponse res = this.query(solrQuery);
+        return res.getResults().getNumFound();
+    }
+
+    @Override
+    public Long count(Object object) {
+        // 把传入对象转换成SolrQuery
+        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(object);
+        return this.count(solrQuery);
     }
 
     @Override
@@ -162,26 +176,48 @@ public class SolrHttpClient implements SolrClient {
     }
 
     @Override
-    public Long aggregation(String field, AggregationEnum agg, SolrQuery sq) {
-        // 利用StatsComponent实现数据库的聚合统计查询，也就是min、max、avg、count、sum的功能
+    public Map<String, Long> aggregate(AggregateEnum agg, SolrQuery sq, String... fields) {
+        if (fields == null || fields.length < 1) {
+            throw new SolrException(ExceptionCode.SOLR_AGGREGATEFIELDISNULL_EXCEPTION.getMessage());
+        }
 
+        Map<String, Long> map = new HashMap<>();
+        // 利用StatsComponent实现数据库的聚合统计查询，也就是min、max、avg、count、sum的功能
         // 是否开启stats（true/false）
         sq.set("stats", true);
-        // 添加一个字段来统计，可以有多个(求和字段)
-        sq.set("stats.field", field);
+        // 添加统计字段，可以有多个
+        sq.set("stats.field", fields);
         // 执行查询
         QueryResponse res = this.query(sq);
         // 获取执行结果
         Map<String, FieldStatsInfo> fieldStatsInfoMap = res.getFieldStatsInfo();
         // stats.field字段设置成什么，这里就获取什么
-        FieldStatsInfo fieldStatsInfo = fieldStatsInfoMap.get(field);
-        String aggStr = null;
-        // 获取sum值，并转换成long
-        if (AggregationEnum.SUM.equals(agg)) {
-            aggStr = fieldStatsInfo.getSum().toString();
+        FieldStatsInfo fieldStatsInfo;
+        Long result = null;
+        String aggStr;
+        try {
+            for (String field : fields) {
+                fieldStatsInfo = fieldStatsInfoMap.get(field);
+
+                // 获取聚合值，并转换成long
+                if (AggregateEnum.SUM.equals(agg)) {
+                    aggStr = fieldStatsInfo.getSum().toString();
+                    result = Double.valueOf(aggStr).longValue();
+                }
+                map.put(field, result);
+            }
+        } catch (Exception e) {
+            throw new SolrException(ExceptionCode.SOLR_AGGREGATEFAILED_EXCEPTION.getMessage());
+        } finally {
+            return map;
         }
-        Long result = Double.valueOf(aggStr).longValue();
-        return result;
+
+    }
+
+    @Override
+    public Map<String, Long> aggregate(AggregateEnum agg, Object object, String... fields) {
+        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(object);
+        return this.aggregate(agg, solrQuery, fields);
     }
 
     /**
