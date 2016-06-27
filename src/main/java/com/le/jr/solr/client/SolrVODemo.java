@@ -16,10 +16,10 @@ import java.util.Date;
 public class SolrVoDemo {
 
     @PageField(name = PageField.PageFiledEnum.PAGESIZE)
-    private int pageSize;
+    private Integer pageSize;
 
     @PageField(name = PageField.PageFiledEnum.START)
-    private int start;
+    private Integer start;
 
     @ScopeField(name = "createTime", mode = ScopeField.ScopeFiledEnum.GT)
     private Date startTime;
