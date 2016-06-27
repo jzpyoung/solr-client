@@ -116,6 +116,7 @@ public class SolrUtils {
                             if (scopeTime != 0) {
                                 str.append(SolrConstant.andStr);
                             }
+                            // 如果需要范围查询的字段是date型，转成UTC
                             if (f.getGenericType().toString().equals(SolrConstant.dateStr)) {
                                 Calendar c = Calendar.getInstance();
                                 c.setTime((Date) f.get(object));
@@ -126,6 +127,7 @@ public class SolrUtils {
                             }
 
                         } else if (ScopeField.ScopeFiledEnum.LT.equals(f.getAnnotation(ScopeField.class).mode())) {
+                            // 如果需要范围查询的字段是date型，转成UTC
                             if (f.getGenericType().toString().equals(SolrConstant.dateStr)) {
                                 Calendar c = Calendar.getInstance();
                                 c.setTime((Date) f.get(object));
