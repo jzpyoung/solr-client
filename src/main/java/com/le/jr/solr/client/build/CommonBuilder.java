@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum;
 import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.GT;
 import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.LT;
 
@@ -29,11 +30,11 @@ public class CommonBuilder extends Builder {
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private int scopeEndTime = 0;
     private int i = 0;
-    private static Calendar c;
+    private static Calendar calendar;
 
     static {
-        c = Calendar.getInstance();
-        c.add(Calendar.HOUR, -8);
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, -8);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class CommonBuilder extends Builder {
             return;
         }
 
-        buildScope(field, object);
+        this.buildScope(field, object);
     }
 
     @Override
@@ -70,39 +71,36 @@ public class CommonBuilder extends Builder {
                 }
 
                 str.append(field.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft);
-
-                if (value == null) {
-                    str.append(SolrConstant.star);
-                } else {
-                    // 如果需要范围查询的字段是date型，转成UTC
-                    if (field.getGenericType().toString().equals(SolrConstant.dateStr)) {
-                        c.setTime(Fields.get(object, field, Date.class));
-                        str.append(dateFormat.format(c.getTime()) + SolrConstant.toStr);
-                    } else {
-                        str.append(Fields.get(object, field) + SolrConstant.toStr);
-                    }
-                }
-
+                appendScopeStr(field, object, value, GT);
             } else if (LT.equals(field.getAnnotation(ScopeField.class).mode())) {
-                if (value == null) {
-                    str.append(SolrConstant.star);
-                } else {
-                    // 如果需要范围查询的字段是date型，转成UTC
-                    if (field.getGenericType().toString().equals(SolrConstant.dateStr)) {
-                        c.setTime(Fields.get(object, field, Date.class));
-                        str.append(dateFormat.format(c.getTime()));
-                    } else {
-                        str.append(Fields.get(object, field));
-                    }
-                }
-
+                appendScopeStr(field, object, value, LT);
                 str.append(SolrConstant.bracketRight);
                 scopeEndTime++;
             }
             return;
         }
 
-        buildCommon(field, object);
+        this.buildCommon(field, object);
+    }
+
+    private void appendScopeStr(Field field, Object object, Object value, ScopeFiledEnum scopeFieldEnum) {
+        if (value == null) {
+            str.append(SolrConstant.star);
+        } else {
+            // 如果需要范围查询的字段是date型，转成UTC
+            if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
+                calendar.setTime(Fields.get(object, field, Date.class));
+                str.append(dateFormat.format(calendar.getTime()));
+            } else {
+                str.append(Fields.get(object, field));
+            }
+
+            switch (scopeFieldEnum) {
+                case GT:
+                    str.append(SolrConstant.toStr);
+                    break;
+            }
+        }
     }
 
     @Override
@@ -117,7 +115,7 @@ public class CommonBuilder extends Builder {
     @Override
     public SolrQuery getResult() {
         solrQuery.addField(SolrConstant.star);
-        if (i == 0) {
+        if (scopeEndTime == 0) {
             solrQuery.setQuery(SolrConstant.queryStr);
         } else {
             solrQuery.setQuery(str.toString());
