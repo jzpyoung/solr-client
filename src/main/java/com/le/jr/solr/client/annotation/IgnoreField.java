@@ -17,5 +17,4 @@ import java.lang.annotation.Target;
 public @interface IgnoreField {
 
     String name() default "";
-
 }

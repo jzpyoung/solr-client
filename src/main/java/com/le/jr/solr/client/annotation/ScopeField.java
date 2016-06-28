@@ -30,5 +30,4 @@ public @interface ScopeField {
         ScopeFiledEnum() {
         }
     }
-
 }
