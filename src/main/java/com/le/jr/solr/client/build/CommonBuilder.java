@@ -63,7 +63,7 @@ public class CommonBuilder extends Builder {
 
                 str.append(field.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft);
 
-                Object value = Fields.get(object, field, Object.class);
+                Object value = Fields.get(object, field);
                 if (value == null) {
                     str.append(SolrConstant.star);
                 } else {
@@ -72,12 +72,12 @@ public class CommonBuilder extends Builder {
                         c.setTime(Fields.get(object, field, Date.class));
                         str.append(dateFormat.format(c.getTime()) + SolrConstant.toStr);
                     } else {
-                        str.append(Fields.get(object, field, Object.class) + SolrConstant.toStr);
+                        str.append(Fields.get(object, field) + SolrConstant.toStr);
                     }
                 }
 
             } else if (ScopeField.ScopeFiledEnum.LT.equals(field.getAnnotation(ScopeField.class).mode())) {
-                Object value = Fields.get(object, field, Object.class);
+                Object value = Fields.get(object, field);
                 if (value == null) {
                     str.append(SolrConstant.star);
                 } else {
@@ -86,7 +86,7 @@ public class CommonBuilder extends Builder {
                         c.setTime(Fields.get(object, field, Date.class));
                         str.append(dateFormat.format(c.getTime()));
                     } else {
-                        str.append(Fields.get(object, field, Object.class));
+                        str.append(Fields.get(object, field));
                     }
                 }
 
@@ -104,7 +104,7 @@ public class CommonBuilder extends Builder {
         if (i != 0) {
             str.append(SolrConstant.andStr);
         }
-        str.append(field.getName() + SolrConstant.colon + Fields.get(object, field, Object.class));
+        str.append(field.getName() + SolrConstant.colon + Fields.get(object, field));
         i++;
     }
 

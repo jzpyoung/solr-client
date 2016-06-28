@@ -33,16 +33,15 @@ public class SolrUtils {
      */
     public static SolrInputDocument vo2Solrdoc(Object object) {
         SolrInputDocument solrdoc = new SolrInputDocument();
-
         Field[] fields = object.getClass().getDeclaredFields();
+        int modifiers;
+        Object fValue;
         for (Field f : fields) {
-
+            fValue = Fields.get(object, f);
+            modifiers = f.getModifiers();
             try {
-                f.setAccessible(true);
-                Object fValue = f.get(object);
-                int modifier = f.getModifiers();
                 // java优先级 && > ||
-                if (Modifier.isStatic(modifier) && Modifier.isFinal(modifier) || fValue == null) {
+                if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers) || fValue == null) {
                     continue;
                 }
                 solrdoc.addField(f.getName(), fValue);
@@ -99,7 +98,7 @@ public class SolrUtils {
         Object fValue;
         for (Field field : fields) {
             modifiers = field.getModifiers();
-            fValue = Fields.get(object, field, Object.class);
+            fValue = Fields.get(object, field);
 
             // static、final、被ignorefield标识的属性忽略
             if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers) || field.isAnnotationPresent(IgnoreField.class) || (fValue == null && !field.isAnnotationPresent(ScopeField.class))) {
