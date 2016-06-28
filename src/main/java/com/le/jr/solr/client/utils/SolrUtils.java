@@ -115,16 +115,4 @@ public class SolrUtils {
 
         return builder.getResult();
     }
-
-    public static void main(String[] args) {
-        SolrVoDemo demo = new SolrVoDemo();
-        demo.setName("123");
-        demo.setPageSize(5);
-        demo.setStart(1);
-        demo.setStartTime(new Date());
-        demo.setEndTime(new Date());
-        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(demo);
-        System.out.println("aaa");
-    }
-
 }

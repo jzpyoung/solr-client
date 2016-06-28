@@ -12,6 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.GT;
+import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.LT;
+
 /**
  * 通用建造者类
  *
@@ -41,11 +44,14 @@ public class CommonBuilder extends Builder {
     @Override
     public void buildPage(Field field, Object object) throws IllegalAccessException {
         if (field.isAnnotationPresent(PageField.class)) {
-            if (PageField.PageFiledEnum.PAGESIZE.equals(field.getAnnotation(PageField.class).name())) {
-                solrQuery.setRows(Fields.get(object, field, Integer.class));
-            }
-            if (PageField.PageFiledEnum.START.equals(field.getAnnotation(PageField.class).name())) {
-                solrQuery.setStart(Fields.get(object, field, Integer.class));
+
+            switch (field.getAnnotation(PageField.class).name()) {
+                case PAGESIZE:
+                    solrQuery.setRows(Fields.get(object, field, Integer.class));
+                    break;
+                case START:
+                    solrQuery.setStart(Fields.get(object, field, Integer.class));
+                    break;
             }
             return;
         }
@@ -56,14 +62,15 @@ public class CommonBuilder extends Builder {
     @Override
     public void buildScope(Field field, Object object) throws IllegalAccessException {
         if (field.isAnnotationPresent(ScopeField.class)) {
-            if (ScopeField.ScopeFiledEnum.GT.equals(field.getAnnotation(ScopeField.class).mode())) {
+            Object value = Fields.get(object, field);
+
+            if (GT.equals(field.getAnnotation(ScopeField.class).mode())) {
                 if (scopeEndTime != 0) {
                     str.append(SolrConstant.andStr);
                 }
 
                 str.append(field.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft);
 
-                Object value = Fields.get(object, field);
                 if (value == null) {
                     str.append(SolrConstant.star);
                 } else {
@@ -76,8 +83,7 @@ public class CommonBuilder extends Builder {
                     }
                 }
 
-            } else if (ScopeField.ScopeFiledEnum.LT.equals(field.getAnnotation(ScopeField.class).mode())) {
-                Object value = Fields.get(object, field);
+            } else if (LT.equals(field.getAnnotation(ScopeField.class).mode())) {
                 if (value == null) {
                     str.append(SolrConstant.star);
                 } else {
