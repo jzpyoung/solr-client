@@ -57,15 +57,15 @@ public class SolrUtils {
      * @return solr查询结果List<SolrInputDocument>
      */
     public static List<SolrInputDocument> list2Solrdoclist(List<? extends Object> oList) {
-        if (oList != null && oList.size() > 0) {
-            List<SolrInputDocument> list = new ArrayList<>();
+        List<SolrInputDocument> list = null;
+        if (oList != null && !oList.isEmpty()) {
+            list = new ArrayList<>();
             for (Object object : oList) {
                 SolrInputDocument solrdoc = vo2Solrdoc(object);
                 list.add(solrdoc);
             }
-            return list;
         }
-        return null;
+        return list;
     }
 
     /**
