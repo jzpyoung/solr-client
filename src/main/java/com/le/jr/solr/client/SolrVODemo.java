@@ -7,7 +7,7 @@ import com.le.jr.solr.client.annotation.ScopeField;
 import java.util.Date;
 
 /**
- * VO demo
+ * QueryVO Demo
  *
  * @author jiazhipeng
  * @version 1.0

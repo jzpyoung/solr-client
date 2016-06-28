@@ -2,6 +2,7 @@ package com.le.jr.solr.client.utils;
 
 import com.le.jr.solr.client.SolrVoDemo;
 import com.le.jr.solr.client.annotation.IgnoreField;
+import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.build.CommonBuilder;
 import com.le.jr.solr.client.build.Director;
 import com.le.jr.solr.client.exceptions.SolrException;
@@ -11,8 +12,6 @@ import org.apache.solr.common.SolrInputDocument;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,8 +24,6 @@ import java.util.List;
  * @date 2016-04-11
  */
 public class SolrUtils {
-
-    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     /**
      * 把vo对象转换成SolrInputDocument
@@ -75,91 +72,6 @@ public class SolrUtils {
     }
 
     /**
-     * 把对象转换成SolrQuery
-     *
-     * @param object 待转换对象
-     * @return SolrQuery
-     */
-//    public static SolrQuery vo2SolrQuery(Object object) {
-//        int i = 0;
-//        int scopeTime = 0;
-//        SolrQuery query = new SolrQuery();
-//        query.addField(SolrConstant.star);
-//
-//        StringBuffer str = new StringBuffer();
-//
-//        Field[] fields = object.getClass().getDeclaredFields();
-//        for (Field f : fields) {
-//            f.setAccessible(true);
-//            int modifiers = f.getModifiers();
-//            try {
-//                Object fValue = f.get(object);
-//
-//                // static、final、被ignorefield标识的属性忽略
-//                if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers) || fValue == null || f.isAnnotationPresent(IgnoreField.class)) {
-//                    continue;
-//                }
-//
-//                // 判断PageField注解标识的分页属性并设置进SolrQuery
-//                if (f.isAnnotationPresent(PageField.class)) {
-//                    if (PageField.PageFiledEnum.PAGESIZE.equals(f.getAnnotation(PageField.class).name())) {
-//                        query.setRows((int) f.get(object));
-//                    }
-//                    if (PageField.PageFiledEnum.START.equals(f.getAnnotation(PageField.class).name())) {
-//                        query.setStart((int) f.get(object));
-//                    }
-//                } else {
-//                    // 判断ScopeField注解标识的范围属性并设置进SolrQuery
-//                    if (f.isAnnotationPresent(ScopeField.class)) {
-//                        if (ScopeField.ScopeFiledEnum.GT.equals(f.getAnnotation(ScopeField.class).mode())) {
-//                            if (scopeTime != 0) {
-//                                str.append(SolrConstant.andStr);
-//                            }
-//                            // 如果需要范围查询的字段是date型，转成UTC
-//                            if (f.getGenericType().toString().equals(SolrConstant.dateStr)) {
-//                                Calendar c = Calendar.getInstance();
-//                                c.setTime((Date) f.get(object));
-//                                c.add(Calendar.HOUR, -8);
-//                                str.append(f.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft + dateFormat.format(c.getTime()) + SolrConstant.toStr);
-//                            } else {
-//                                str.append(f.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft + f.get(object) + SolrConstant.toStr);
-//                            }
-//
-//                        } else if (ScopeField.ScopeFiledEnum.LT.equals(f.getAnnotation(ScopeField.class).mode())) {
-//                            // 如果需要范围查询的字段是date型，转成UTC
-//                            if (f.getGenericType().toString().equals(SolrConstant.dateStr)) {
-//                                Calendar c = Calendar.getInstance();
-//                                c.setTime((Date) f.get(object));
-//                                c.add(Calendar.HOUR, -8);
-//                                str.append(dateFormat.format(c.getTime()) + SolrConstant.bracketRight);
-//                            } else {
-//                                str.append(f.get(object) + SolrConstant.bracketRight);
-//                            }
-//                            scopeTime++;
-//                        }
-//                    } else {
-//                        // 没有被任何注解标识的普通属性设置进SolrQuery
-//                        if (i != 0) {
-//                            str.append(SolrConstant.andStr);
-//                        }
-//                        str.append(f.getName() + SolrConstant.colon + f.get(object));
-//                    }
-//                    i++;
-//                }
-//            } catch (Exception e) {
-//                throw new SolrException(e);
-//            }
-//        }
-//
-//        if (i == 0) {
-//            query.setQuery(SolrConstant.queryStr);
-//        } else {
-//            query.setQuery(str.toString());
-//        }
-//        return query;
-//    }
-
-    /**
      * 把QueryResponse转换成List<VO>
      *
      * @param docList 待转换查询结果
@@ -170,7 +82,6 @@ public class SolrUtils {
         String listJson = Gsons.toJson(docList);
         return Gsons.fromJson2List(listJson, cls);
     }
-
 
     /**
      * 把对象转换成SolrQuery
@@ -184,25 +95,26 @@ public class SolrUtils {
         // 初始化建造者类
         CommonBuilder builder = new CommonBuilder();
         Field[] fields = object.getClass().getDeclaredFields();
-        for (Field f : fields) {
-            f.setAccessible(true);
-            int modifiers = f.getModifiers();
+        int modifiers;
+        Object fValue;
+        for (Field field : fields) {
+            modifiers = field.getModifiers();
+            fValue = Fields.get(object, field, Object.class);
+
+            // static、final、被ignorefield标识的属性忽略
+            if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers) || field.isAnnotationPresent(IgnoreField.class) || (fValue == null && !field.isAnnotationPresent(ScopeField.class))) {
+                continue;
+            }
+
             try {
-                Object fValue = f.get(object);
-
-                // static、final、被ignorefield标识的属性忽略
-                if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers) || fValue == null || f.isAnnotationPresent(IgnoreField.class)) {
-                    continue;
-                }
-
                 // 指挥者执行builder
-                director.construct(builder, f, object);
+                director.construct(builder, field, object);
             } catch (Exception e) {
                 throw new SolrException(e);
             }
         }
-        SolrQuery result = builder.getResult();
-        return result;
+
+        return builder.getResult();
     }
 
     public static void main(String[] args) {
@@ -213,6 +125,7 @@ public class SolrUtils {
         demo.setStartTime(new Date());
         demo.setEndTime(new Date());
         SolrQuery solrQuery = SolrUtils.vo2SolrQuery(demo);
+        System.out.println("aaa");
     }
 
 }
