@@ -115,7 +115,7 @@ public class CommonBuilder extends Builder {
     @Override
     public SolrQuery getResult() {
         solrQuery.addField(SolrConstant.star);
-        if (scopeEndTime == 0) {
+        if (scopeEndTime == 0 && i == 0) {
             solrQuery.setQuery(SolrConstant.queryStr);
         } else {
             solrQuery.setQuery(str.toString());
