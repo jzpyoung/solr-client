@@ -3,6 +3,7 @@ package com.le.jr.solr.client.build;
 import com.le.jr.solr.client.annotation.PageField;
 import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.common.constant.SolrConstant;
+import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.utils.Fields;
 import org.apache.solr.client.solrj.SolrQuery;
 
@@ -38,8 +39,16 @@ public class CommonBuilder extends Builder {
     }
 
     @Override
-    public void buildQuery(Field field, Object object) throws IllegalAccessException {
-        this.buildPage(field, object);
+    public void buildQuery(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
+        switch (operateEnum) {
+            case QUERY:
+                this.buildPage(field, object);
+                break;
+            case COUNT:
+                this.buildScope(field, object);
+                break;
+        }
+
     }
 
     @Override

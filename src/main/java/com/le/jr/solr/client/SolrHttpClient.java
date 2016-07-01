@@ -2,6 +2,7 @@ package com.le.jr.solr.client;
 
 import com.le.jr.solr.client.common.code.ExceptionCode;
 import com.le.jr.solr.client.common.enums.AggregateEnum;
+import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.datasource.SolrServerGroup;
 import com.le.jr.solr.client.exceptions.SolrException;
 import com.le.jr.solr.client.utils.SolrUtils;
@@ -119,7 +120,7 @@ public class SolrHttpClient implements SolrClient {
     @Override
     public <T> List<T> query(Object queryObj, Class<T> clazz) {
         // 把传入对象转换成SolrQuery
-        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(queryObj);
+        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(queryObj, OperateEnum.QUERY);
 
         QueryResponse res = this.query(solrQuery);
         SolrDocumentList sdl;
@@ -140,7 +141,7 @@ public class SolrHttpClient implements SolrClient {
     @Override
     public Long count(Object object) {
         // 把传入对象转换成SolrQuery
-        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(object);
+        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(object, OperateEnum.COUNT);
         return this.count(solrQuery);
     }
 
@@ -216,7 +217,7 @@ public class SolrHttpClient implements SolrClient {
 
     @Override
     public Map<String, Long> aggregate(AggregateEnum agg, Object object, String... fields) {
-        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(object);
+        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(object, OperateEnum.QUERY);
         return this.aggregate(agg, solrQuery, fields);
     }
 

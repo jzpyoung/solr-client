@@ -1,5 +1,6 @@
 package com.le.jr.solr.client.build;
 
+import com.le.jr.solr.client.common.enums.OperateEnum;
 import org.apache.solr.client.solrj.SolrQuery;
 
 import java.lang.reflect.Field;
@@ -18,9 +19,10 @@ public abstract class Builder {
      *
      * @param field
      * @param object
+     * @param operateEnum
      * @throws IllegalAccessException
      */
-    public abstract void buildQuery(Field field, Object object) throws IllegalAccessException;
+    public abstract void buildQuery(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException;
 
     /**
      * builder page

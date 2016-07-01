@@ -1,10 +1,10 @@
 package com.le.jr.solr.client.utils;
 
-import com.le.jr.solr.client.SolrVoDemo;
 import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.ScopeField;
-import com.le.jr.solr.client.build.CommonBuilder;
 import com.le.jr.solr.client.build.Director;
+import com.le.jr.solr.client.build.CommonBuilder;
+import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.exceptions.SolrException;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocumentList;
@@ -13,7 +13,6 @@ import org.apache.solr.common.SolrInputDocument;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -88,7 +87,7 @@ public class SolrUtils {
      * @param object 待转换对象
      * @return SolrQuery
      */
-    public static SolrQuery vo2SolrQuery(Object object) {
+    public static SolrQuery vo2SolrQuery(Object object, OperateEnum operateEnum) {
         // 初始化指挥者类
         Director director = new Director();
         // 初始化建造者类
@@ -107,7 +106,7 @@ public class SolrUtils {
 
             try {
                 // 指挥者执行builder
-                director.construct(builder, field, object);
+                director.construct(builder, field, object, operateEnum);
             } catch (Exception e) {
                 throw new SolrException(e);
             }
