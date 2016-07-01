@@ -75,7 +75,7 @@ public class CommonBuilder extends Builder {
             Object value = Fields.get(object, field);
 
             if (GT.equals(field.getAnnotation(ScopeField.class).mode())) {
-                if (scopeEndTime != 0) {
+                if (scopeEndTime != 0 || i != 0) {
                     str.append(SolrConstant.andStr);
                 }
 
@@ -103,12 +103,11 @@ public class CommonBuilder extends Builder {
             } else {
                 str.append(Fields.get(object, field));
             }
-
-            switch (scopeFieldEnum) {
-                case GT:
-                    str.append(SolrConstant.toStr);
-                    break;
-            }
+        }
+        switch (scopeFieldEnum) {
+            case GT:
+                str.append(SolrConstant.toStr);
+                break;
         }
     }
 

@@ -2,8 +2,8 @@ package com.le.jr.solr.client.utils;
 
 import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.ScopeField;
-import com.le.jr.solr.client.build.Director;
 import com.le.jr.solr.client.build.CommonBuilder;
+import com.le.jr.solr.client.build.Director;
 import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.exceptions.SolrException;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -97,10 +97,14 @@ public class SolrUtils {
         Object fValue;
         for (Field field : fields) {
             modifiers = field.getModifiers();
+            if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
+                continue;
+            }
+
             fValue = Fields.get(object, field);
 
             // static、final、被ignorefield标识的属性忽略
-            if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers) || field.isAnnotationPresent(IgnoreField.class) || (fValue == null && !field.isAnnotationPresent(ScopeField.class))) {
+            if (field.isAnnotationPresent(IgnoreField.class) || (fValue == null && !field.isAnnotationPresent(ScopeField.class)) || "".equals(fValue)) {
                 continue;
             }
 
