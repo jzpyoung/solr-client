@@ -1,5 +1,6 @@
 package com.le.jr.solr.client.utils;
 
+import com.le.jr.solr.client.ReconciliationQueryInput;
 import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.build.CommonBuilder;
@@ -36,11 +37,16 @@ public class SolrUtils {
         int modifiers;
         Object fValue;
         for (Field f : fields) {
-            fValue = Fields.get(object, f);
             modifiers = f.getModifiers();
+            if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
+                continue;
+            }
+
+            fValue = Fields.get(object, f);
+
             try {
                 // java优先级 && > ||
-                if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers) || fValue == null) {
+                if (fValue == null) {
                     continue;
                 }
                 solrdoc.addField(f.getName(), fValue);
@@ -117,5 +123,13 @@ public class SolrUtils {
         }
 
         return builder.getResult();
+    }
+
+    public static void main(String[] args) {
+        ReconciliationQueryInput input = new ReconciliationQueryInput();
+        input.setFlag((byte) 1);
+        input.setPageSizeSelf(5);
+        input.setStartRow(3);
+        SolrUtils.vo2SolrQuery(input, OperateEnum.COUNT);
     }
 }

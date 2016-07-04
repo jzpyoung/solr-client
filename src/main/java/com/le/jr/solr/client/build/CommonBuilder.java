@@ -40,20 +40,19 @@ public class CommonBuilder extends Builder {
 
     @Override
     public void buildQuery(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
-        switch (operateEnum) {
-            case QUERY:
-                this.buildPage(field, object);
-                break;
-            case COUNT:
-                this.buildScope(field, object);
-                break;
-        }
+        this.buildPage(field, object, operateEnum);
+
 
     }
 
     @Override
-    public void buildPage(Field field, Object object) throws IllegalAccessException {
+    public void buildPage(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
         if (field.isAnnotationPresent(PageField.class)) {
+
+            switch (operateEnum) {
+                case COUNT:
+                    return;
+            }
 
             switch (field.getAnnotation(PageField.class).name()) {
                 case PAGESIZE:
@@ -113,7 +112,7 @@ public class CommonBuilder extends Builder {
 
     @Override
     public void buildCommon(Field field, Object object) throws IllegalAccessException {
-        if (i != 0) {
+        if (i != 0 || scopeEndTime != 0) {
             str.append(SolrConstant.andStr);
         }
         str.append(field.getName() + SolrConstant.colon + Fields.get(object, field));

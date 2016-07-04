@@ -31,7 +31,7 @@ public abstract class Builder {
      * @param object
      * @throws IllegalAccessException
      */
-    public abstract void buildPage(Field field, Object object) throws IllegalAccessException;
+    public abstract void buildPage(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException;
 
     /**
      * builder scope
