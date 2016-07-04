@@ -1,11 +1,11 @@
 package com.le.jr.solr.client.utils;
 
-import com.le.jr.solr.client.ReconciliationQueryInput;
 import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.build.CommonBuilder;
 import com.le.jr.solr.client.build.Director;
 import com.le.jr.solr.client.common.enums.OperateEnum;
+import com.le.jr.solr.client.common.enums.ZeroOneEnum;
 import com.le.jr.solr.client.exceptions.SolrException;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocumentList;
@@ -15,6 +15,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.GT;
+import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.LT;
 
 /**
  * solr工具类
@@ -101,6 +104,9 @@ public class SolrUtils {
         Field[] fields = object.getClass().getDeclaredFields();
         int modifiers;
         Object fValue;
+        Object scopeStart = null;
+        Object scopeEnd = null;
+        Integer scope = ZeroOneEnum.ZERO.getValue();
         for (Field field : fields) {
             modifiers = field.getModifiers();
             if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
@@ -108,9 +114,10 @@ public class SolrUtils {
             }
 
             fValue = Fields.get(object, field);
+            boolean flag = judgeScopeBothNull(field, fValue, scope, scopeStart, scopeEnd);
 
             // static、final、被ignorefield标识的属性忽略
-            if (field.isAnnotationPresent(IgnoreField.class) || (fValue == null && !field.isAnnotationPresent(ScopeField.class)) || "".equals(fValue)) {
+            if (field.isAnnotationPresent(IgnoreField.class) || (fValue == null && !field.isAnnotationPresent(ScopeField.class)) || "".equals(fValue) || flag) {
                 continue;
             }
 
@@ -125,11 +132,28 @@ public class SolrUtils {
         return builder.getResult();
     }
 
-    public static void main(String[] args) {
-        ReconciliationQueryInput input = new ReconciliationQueryInput();
-        input.setFlag((byte) 1);
-        input.setPageSizeSelf(5);
-        input.setStartRow(3);
-        SolrUtils.vo2SolrQuery(input, OperateEnum.COUNT);
+    private static boolean judgeScopeBothNull(Field field, Object fValue, Integer scope, Object scopeStart, Object scopeEnd) {
+        if (field.isAnnotationPresent(ScopeField.class) && GT.equals(field.getAnnotation(ScopeField.class).mode())) {
+            scopeStart = fValue;
+            scope++;
+            return judgeScopeBothNullFlag(scope, scopeStart, scopeEnd);
+        } else if (field.isAnnotationPresent(ScopeField.class) && LT.equals(field.getAnnotation(ScopeField.class).mode())) {
+            scopeEnd = fValue;
+            scope++;
+            return judgeScopeBothNullFlag(scope, scopeStart, scopeEnd);
+        }
+        return false;
+    }
+
+    private static boolean judgeScopeBothNullFlag(Integer scope, Object scopeStart, Object scopeEnd) {
+        if (scope > ZeroOneEnum.ONE.getValue()) {
+            scope = ZeroOneEnum.ZERO.getValue();
+            if (scopeStart == null && scopeEnd == null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 }

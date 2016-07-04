@@ -41,8 +41,6 @@ public class CommonBuilder extends Builder {
     @Override
     public void buildQuery(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
         this.buildPage(field, object, operateEnum);
-
-
     }
 
     @Override
