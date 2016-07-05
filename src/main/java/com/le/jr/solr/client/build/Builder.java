@@ -26,6 +26,15 @@ public abstract class Builder {
     public abstract void buildQuery(Field field, Object object, OperateEnum operateEnum, Map<String, Object> map) throws IllegalAccessException;
 
     /**
+     * builder scope
+     *
+     * @param field
+     * @param object
+     * @throws IllegalAccessException
+     */
+    public abstract void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException;
+
+    /**
      * builder page
      *
      * @param field
@@ -35,13 +44,13 @@ public abstract class Builder {
     public abstract void buildPage(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException;
 
     /**
-     * builder scope
+     * builder in
      *
      * @param field
      * @param object
      * @throws IllegalAccessException
      */
-    public abstract void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException;
+    public abstract void buildIn(Field field, Object object) throws IllegalAccessException;
 
     /**
      * builder common

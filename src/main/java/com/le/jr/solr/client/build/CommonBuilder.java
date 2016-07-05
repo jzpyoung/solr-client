@@ -1,5 +1,6 @@
 package com.le.jr.solr.client.build;
 
+import com.le.jr.solr.client.annotation.InField;
 import com.le.jr.solr.client.annotation.PageField;
 import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.common.constant.SolrConstant;
@@ -13,6 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +31,7 @@ public class CommonBuilder extends Builder {
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private int scopeTime = 0;
     private int commonTime = 0;
+    private int inTime = 0;
     private static Calendar calendar;
 
     static {
@@ -48,7 +51,7 @@ public class CommonBuilder extends Builder {
 
     @Override
     public void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException {
-        if (scopeTime != 0 || commonTime != 0) {
+        if (scopeTime != 0 || commonTime != 0 || inTime!=0) {
             str.append(SolrConstant.andStr);
         }
         Object scopeStart = map.get(ScopeEnum.SCOPESTART.getValue());
@@ -74,7 +77,6 @@ public class CommonBuilder extends Builder {
     @Override
     public void buildPage(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
         if (field.isAnnotationPresent(PageField.class)) {
-
             switch (operateEnum) {
                 case COUNT:
                     return;
@@ -91,12 +93,41 @@ public class CommonBuilder extends Builder {
             return;
         }
 
+        this.buildIn(field, object);
+    }
+
+    @Override
+    public void buildIn(Field field, Object object) throws IllegalAccessException {
+        if (field.isAnnotationPresent(InField.class)) {
+            List<Object> inlist = (List) Fields.get(object, field);
+            Object inEach;
+            String inStr = "";
+            if (inlist != null && inlist.size() > 0) {
+                if (scopeTime != 0 || commonTime != 0 || inTime!=0) {
+                    str.append(SolrConstant.andStr);
+                }
+                for (int i = 0; i < inlist.size(); i++) {
+                    inEach = inlist.get(i);
+                    if (i > 0) {
+                        inStr = inStr + " OR ";
+                    }
+                    if (inEach instanceof Date) {
+                        calendar.setTime((Date) inEach);
+                        inEach = dateFormat.format(calendar.getTime());
+                    }
+                    inStr = inStr + inEach;
+                }
+                str.append(field.getAnnotation(InField.class).name() + ":" + inStr);
+                inTime++;
+            }
+            return;
+        }
         this.buildCommon(field, object);
     }
 
     @Override
     public void buildCommon(Field field, Object object) throws IllegalAccessException {
-        if (commonTime != 0 || scopeTime != 0) {
+        if (commonTime != 0 || scopeTime != 0 || inTime!=0) {
             str.append(SolrConstant.andStr);
         }
         str.append(field.getName() + SolrConstant.colon + Fields.get(object, field));
@@ -106,7 +137,7 @@ public class CommonBuilder extends Builder {
     @Override
     public SolrQuery getResult() {
         solrQuery.addField(SolrConstant.star);
-        if (scopeTime != 0 || commonTime != 0) {
+        if (scopeTime != 0 || commonTime != 0 || inTime!=0) {
             solrQuery.setQuery(str.toString());
         } else {
             solrQuery.setQuery(SolrConstant.queryStr);

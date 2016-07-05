@@ -1,10 +1,12 @@
 package com.le.jr.solr.client;
 
 import com.le.jr.solr.client.annotation.IgnoreField;
+import com.le.jr.solr.client.annotation.InField;
 import com.le.jr.solr.client.annotation.PageField;
 import com.le.jr.solr.client.annotation.ScopeField;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * QueryVO Demo
@@ -29,6 +31,12 @@ public class SolrVoDemo {
 
     @IgnoreField
     private String letvUserId;
+
+    @InField(name = "orderId")
+    private List<Integer> orderList;
+
+    @InField(name = "time")
+    private List<Date> timeList;
 
     private String name;
 
@@ -78,6 +86,30 @@ public class SolrVoDemo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public void setStart(Integer start) {
+        this.start = start;
+    }
+
+    public List<Integer> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<Integer> orderList) {
+        this.orderList = orderList;
+    }
+
+    public List<Date> getTimeList() {
+        return timeList;
+    }
+
+    public void setTimeList(List<Date> timeList) {
+        this.timeList = timeList;
     }
 
     @Override
