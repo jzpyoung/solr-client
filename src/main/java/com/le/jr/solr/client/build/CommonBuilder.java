@@ -15,8 +15,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
-import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum;
-
 /**
  * 通用建造者类
  *
@@ -29,7 +27,7 @@ public class CommonBuilder extends Builder {
     private SolrQuery solrQuery = new SolrQuery();
     private StringBuilder str = new StringBuilder();
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-    private int scopeEndTime = 0;
+    private int scopeTime = 0;
     private int i = 0;
     private static Calendar calendar;
 
@@ -46,6 +44,31 @@ public class CommonBuilder extends Builder {
             this.buildPage(field, object, operateEnum);
         }
 
+    }
+
+    @Override
+    public void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException {
+        if (scopeTime != 0 || i != 0) {
+            str.append(SolrConstant.andStr);
+        }
+        Object scopeStart = map.get(ScopeEnum.SCOPESTART.getValue());
+        if (scopeStart == null) {
+            scopeStart = SolrConstant.star;
+        } else if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
+            calendar.setTime((Date) scopeStart);
+            scopeStart = dateFormat.format(calendar.getTime());
+        }
+
+
+        Object scopeEnd = map.get(ScopeEnum.SCOPEEND.getValue());
+        if (scopeEnd == null) {
+            scopeEnd = SolrConstant.star;
+        } else if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
+            calendar.setTime((Date) scopeEnd);
+            scopeEnd = dateFormat.format(calendar.getTime());
+        }
+        str.append(field.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft + scopeStart + SolrConstant.toStr + scopeEnd + SolrConstant.bracketRight);
+        scopeTime++;
     }
 
     @Override
@@ -72,33 +95,8 @@ public class CommonBuilder extends Builder {
     }
 
     @Override
-    public void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException {
-        if (scopeEndTime != 0 || i != 0) {
-            str.append(SolrConstant.andStr);
-        }
-        Object scopeStart = map.get(ScopeEnum.SCOPESTART.getValue());
-        if (scopeStart == null) {
-            scopeStart = SolrConstant.star;
-        } else if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
-            calendar.setTime((Date) scopeStart);
-            scopeStart = dateFormat.format(calendar.getTime());
-        }
-
-
-        Object scopeEnd = map.get(ScopeEnum.SCOPEEND.getValue());
-        if (scopeEnd == null) {
-            scopeEnd = SolrConstant.star;
-        }else if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
-            calendar.setTime((Date) scopeEnd);
-            scopeEnd = dateFormat.format(calendar.getTime());
-        }
-        str.append(field.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft + scopeStart + SolrConstant.toStr + scopeEnd + SolrConstant.bracketRight);
-        scopeEndTime++;
-    }
-
-    @Override
     public void buildCommon(Field field, Object object) throws IllegalAccessException {
-        if (i != 0 || scopeEndTime != 0) {
+        if (i != 0 || scopeTime != 0) {
             str.append(SolrConstant.andStr);
         }
         str.append(field.getName() + SolrConstant.colon + Fields.get(object, field));
@@ -108,7 +106,7 @@ public class CommonBuilder extends Builder {
     @Override
     public SolrQuery getResult() {
         solrQuery.addField(SolrConstant.star);
-        if (scopeEndTime == 0 && i == 0) {
+        if (scopeTime == 0 && i == 0) {
             solrQuery.setQuery(SolrConstant.queryStr);
         } else {
             solrQuery.setQuery(str.toString());
