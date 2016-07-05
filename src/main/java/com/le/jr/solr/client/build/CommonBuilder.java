@@ -28,7 +28,7 @@ public class CommonBuilder extends Builder {
     private StringBuilder str = new StringBuilder();
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private int scopeTime = 0;
-    private int i = 0;
+    private int commonTime = 0;
     private static Calendar calendar;
 
     static {
@@ -48,7 +48,7 @@ public class CommonBuilder extends Builder {
 
     @Override
     public void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException {
-        if (scopeTime != 0 || i != 0) {
+        if (scopeTime != 0 || commonTime != 0) {
             str.append(SolrConstant.andStr);
         }
         Object scopeStart = map.get(ScopeEnum.SCOPESTART.getValue());
@@ -96,20 +96,20 @@ public class CommonBuilder extends Builder {
 
     @Override
     public void buildCommon(Field field, Object object) throws IllegalAccessException {
-        if (i != 0 || scopeTime != 0) {
+        if (commonTime != 0 || scopeTime != 0) {
             str.append(SolrConstant.andStr);
         }
         str.append(field.getName() + SolrConstant.colon + Fields.get(object, field));
-        i++;
+        commonTime++;
     }
 
     @Override
     public SolrQuery getResult() {
         solrQuery.addField(SolrConstant.star);
-        if (scopeTime == 0 && i == 0) {
-            solrQuery.setQuery(SolrConstant.queryStr);
-        } else {
+        if (scopeTime != 0 || commonTime != 0) {
             solrQuery.setQuery(str.toString());
+        } else {
+            solrQuery.setQuery(SolrConstant.queryStr);
         }
         return solrQuery;
     }
