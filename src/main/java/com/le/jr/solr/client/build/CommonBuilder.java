@@ -4,6 +4,7 @@ import com.le.jr.solr.client.annotation.PageField;
 import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.common.constant.SolrConstant;
 import com.le.jr.solr.client.common.enums.OperateEnum;
+import com.le.jr.solr.client.common.enums.ScopeEnum;
 import com.le.jr.solr.client.utils.Fields;
 import org.apache.solr.client.solrj.SolrQuery;
 
@@ -12,10 +13,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum;
-import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.GT;
-import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.LT;
 
 /**
  * 通用建造者类
@@ -39,8 +39,13 @@ public class CommonBuilder extends Builder {
     }
 
     @Override
-    public void buildQuery(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
-        this.buildPage(field, object, operateEnum);
+    public void buildQuery(Field field, Object object, OperateEnum operateEnum, Map<String, Object> map) throws IllegalAccessException {
+        if (OperateEnum.SCOPE.equals(operateEnum)) {
+            this.buildScope(field, object, map);
+        } else {
+            this.buildPage(field, object, operateEnum);
+        }
+
     }
 
     @Override
@@ -63,49 +68,32 @@ public class CommonBuilder extends Builder {
             return;
         }
 
-        this.buildScope(field, object);
-    }
-
-    @Override
-    public void buildScope(Field field, Object object) throws IllegalAccessException {
-        if (field.isAnnotationPresent(ScopeField.class)) {
-            Object value = Fields.get(object, field);
-
-            if (GT.equals(field.getAnnotation(ScopeField.class).mode())) {
-                if (scopeEndTime != 0 || i != 0) {
-                    str.append(SolrConstant.andStr);
-                }
-
-                str.append(field.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft);
-                appendScopeStr(field, object, value, GT);
-            } else if (LT.equals(field.getAnnotation(ScopeField.class).mode())) {
-                appendScopeStr(field, object, value, LT);
-                str.append(SolrConstant.bracketRight);
-                scopeEndTime++;
-            }
-            return;
-        }
-
         this.buildCommon(field, object);
     }
 
-    private void appendScopeStr(Field field, Object object, Object value, ScopeFiledEnum scopeFieldEnum) {
-        if (value == null) {
-            str.append(SolrConstant.star);
-        } else {
-            // 如果需要范围查询的字段是date型，转成UTC
-            if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
-                calendar.setTime(Fields.get(object, field, Date.class));
-                str.append(dateFormat.format(calendar.getTime()));
-            } else {
-                str.append(Fields.get(object, field));
-            }
+    @Override
+    public void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException {
+        if (scopeEndTime != 0 || i != 0) {
+            str.append(SolrConstant.andStr);
         }
-        switch (scopeFieldEnum) {
-            case GT:
-                str.append(SolrConstant.toStr);
-                break;
+        Object scopeStart = map.get(ScopeEnum.SCOPESTART.getValue());
+        if (scopeStart == null) {
+            scopeStart = SolrConstant.star;
+        } else if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
+            calendar.setTime((Date) scopeStart);
+            scopeStart = dateFormat.format(calendar.getTime());
         }
+
+
+        Object scopeEnd = map.get(ScopeEnum.SCOPEEND.getValue());
+        if (scopeEnd == null) {
+            scopeEnd = SolrConstant.star;
+        }else if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
+            calendar.setTime((Date) scopeEnd);
+            scopeEnd = dateFormat.format(calendar.getTime());
+        }
+        str.append(field.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft + scopeStart + SolrConstant.toStr + scopeEnd + SolrConstant.bracketRight);
+        scopeEndTime++;
     }
 
     @Override

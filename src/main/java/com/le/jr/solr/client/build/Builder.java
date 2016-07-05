@@ -4,6 +4,7 @@ import com.le.jr.solr.client.common.enums.OperateEnum;
 import org.apache.solr.client.solrj.SolrQuery;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 
 /**
  * 建造者父类
@@ -22,7 +23,7 @@ public abstract class Builder {
      * @param operateEnum
      * @throws IllegalAccessException
      */
-    public abstract void buildQuery(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException;
+    public abstract void buildQuery(Field field, Object object, OperateEnum operateEnum, Map<String, Object> map) throws IllegalAccessException;
 
     /**
      * builder page
@@ -40,7 +41,7 @@ public abstract class Builder {
      * @param object
      * @throws IllegalAccessException
      */
-    public abstract void buildScope(Field field, Object object) throws IllegalAccessException;
+    public abstract void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException;
 
     /**
      * builder common

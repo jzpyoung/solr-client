@@ -9,5 +9,5 @@ package com.le.jr.solr.client.common.enums;
  */
 public enum OperateEnum {
 
-    QUERY, COUNT
+    QUERY, COUNT, SCOPE
 }

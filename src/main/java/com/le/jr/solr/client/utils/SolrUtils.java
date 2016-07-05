@@ -5,6 +5,7 @@ import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.build.CommonBuilder;
 import com.le.jr.solr.client.build.Director;
 import com.le.jr.solr.client.common.enums.OperateEnum;
+import com.le.jr.solr.client.common.enums.ScopeEnum;
 import com.le.jr.solr.client.common.enums.ZeroOneEnum;
 import com.le.jr.solr.client.exceptions.SolrException;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -14,7 +15,9 @@ import org.apache.solr.common.SolrInputDocument;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.GT;
 import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.LT;
@@ -104,9 +107,10 @@ public class SolrUtils {
         Field[] fields = object.getClass().getDeclaredFields();
         int modifiers;
         Object fValue;
-        Object scopeStart = null;
-        Object scopeEnd = null;
-        Integer scope = ZeroOneEnum.ZERO.getValue();
+        Map<String, Object> scopeMap = new HashMap<>();
+        scopeMap.put(ScopeEnum.SCOPE.getValue(), ZeroOneEnum.ZERO.getValue());
+        scopeMap.put(ScopeEnum.SCOPESTART.getValue(), null);
+        scopeMap.put(ScopeEnum.SCOPEEND.getValue(), null);
         for (Field field : fields) {
             modifiers = field.getModifiers();
             if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
@@ -114,7 +118,7 @@ public class SolrUtils {
             }
 
             fValue = Fields.get(object, field);
-            boolean flag = judgeScopeBothNull(field, fValue, scope, scopeStart, scopeEnd);
+            boolean flag = judgeScopeBothNull(field, fValue, scopeMap);
 
             // static、final、被ignorefield标识的属性忽略
             if (field.isAnnotationPresent(IgnoreField.class) || (fValue == null && !field.isAnnotationPresent(ScopeField.class)) || "".equals(fValue) || flag) {
@@ -123,7 +127,12 @@ public class SolrUtils {
 
             try {
                 // 指挥者执行builder
-                director.construct(builder, field, object, operateEnum);
+                if (field.isAnnotationPresent(ScopeField.class)) {
+                    director.construct(builder, field, object, OperateEnum.SCOPE, scopeMap);
+                } else {
+                    director.construct(builder, field, object, operateEnum, new HashMap<String, Object>());
+                }
+
             } catch (Exception e) {
                 throw new SolrException(e);
             }
@@ -132,23 +141,26 @@ public class SolrUtils {
         return builder.getResult();
     }
 
-    private static boolean judgeScopeBothNull(Field field, Object fValue, Integer scope, Object scopeStart, Object scopeEnd) {
+    private static boolean judgeScopeBothNull(Field field, Object fValue, Map<String, Object> scopeMap) {
+        int scope;
         if (field.isAnnotationPresent(ScopeField.class) && GT.equals(field.getAnnotation(ScopeField.class).mode())) {
-            scopeStart = fValue;
-            scope++;
-            return judgeScopeBothNullFlag(scope, scopeStart, scopeEnd);
+            scopeMap.put(ScopeEnum.SCOPESTART.getValue(), fValue);
+            scope = (int) scopeMap.get(ScopeEnum.SCOPE.getValue());
+            scopeMap.put(ScopeEnum.SCOPE.getValue(), ++scope);
+            return judgeScopeBothNullFlag(scopeMap);
         } else if (field.isAnnotationPresent(ScopeField.class) && LT.equals(field.getAnnotation(ScopeField.class).mode())) {
-            scopeEnd = fValue;
-            scope++;
-            return judgeScopeBothNullFlag(scope, scopeStart, scopeEnd);
+            scopeMap.put(ScopeEnum.SCOPEEND.getValue(), fValue);
+            scope = (int) scopeMap.get(ScopeEnum.SCOPE.getValue());
+            scopeMap.put(ScopeEnum.SCOPE.getValue(), ++scope);
+            return judgeScopeBothNullFlag(scopeMap);
         }
         return false;
     }
 
-    private static boolean judgeScopeBothNullFlag(Integer scope, Object scopeStart, Object scopeEnd) {
-        if (scope > ZeroOneEnum.ONE.getValue()) {
-            scope = ZeroOneEnum.ZERO.getValue();
-            if (scopeStart == null && scopeEnd == null) {
+    private static boolean judgeScopeBothNullFlag(Map<String, Object> scopeMap) {
+        if ((int) scopeMap.get(ScopeEnum.SCOPE.getValue()) > ZeroOneEnum.ONE.getValue()) {
+            scopeMap.put(ScopeEnum.SCOPE.getValue(), ZeroOneEnum.ZERO.getValue());
+            if (scopeMap.get(ScopeEnum.SCOPESTART.getValue()) == null && scopeMap.get(ScopeEnum.SCOPEEND.getValue()) == null) {
                 return true;
             } else {
                 return false;
