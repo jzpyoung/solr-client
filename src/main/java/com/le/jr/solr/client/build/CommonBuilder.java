@@ -49,7 +49,7 @@ public class CommonBuilder extends Builder {
 
     @Override
     public void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException {
-        if (andTime != 0) {
+        if (andTime != ZeroOneEnum.ZERO.getValue()) {
             str.append(SolrConstant.andStr);
         }
         Object scopeStart = map.get(ScopeEnum.SCOPESTART.getValue());
@@ -126,7 +126,7 @@ public class CommonBuilder extends Builder {
 
     @Override
     public void buildCommon(Field field, Object object) throws IllegalAccessException {
-        if (andTime != 0) {
+        if (andTime != ZeroOneEnum.ZERO.getValue()) {
             str.append(SolrConstant.andStr);
         }
         str.append(field.getName() + SolrConstant.colon + Fields.get(object, field));
@@ -136,7 +136,7 @@ public class CommonBuilder extends Builder {
     @Override
     public SolrQuery getResult() {
         solrQuery.addField(SolrConstant.star);
-        if (andTime != 0) {
+        if (andTime != ZeroOneEnum.ZERO.getValue()) {
             solrQuery.setQuery(str.toString());
         } else {
             solrQuery.setQuery(SolrConstant.queryStr);
