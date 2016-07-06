@@ -167,4 +167,15 @@ public class SolrUtils {
         }
         return true;
     }
+
+    public static void main(String[] args) {
+        List<Integer> list = Lists.newArrayList();
+        list.add(1);
+        list.add(2);
+        SolrVoDemo demo = new SolrVoDemo();
+        demo.setName("jzp");
+        demo.setOrderList(list);
+        demo.setStartTime(new Date());
+        SolrUtils.vo2SolrQuery(demo,OperateEnum.QUERY);
+    }
 }

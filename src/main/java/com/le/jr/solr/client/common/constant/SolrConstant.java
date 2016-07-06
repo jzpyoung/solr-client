@@ -13,6 +13,8 @@ public class SolrConstant {
 
     public static final String andStr = " AND ";
 
+    public static final String orStr = " OR ";
+
     public static final String toStr = " TO ";
 
     public static final String dateStr = "class java.util.Date";
