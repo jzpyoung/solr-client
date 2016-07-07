@@ -18,7 +18,7 @@ import java.util.Map;
 public interface SolrClient {
 
     /**
-     * 增加单条索引数据(document)
+     * 增加单条索引数据
      *
      * @param document 待添加文档
      * @return 操作是否成功
@@ -26,7 +26,7 @@ public interface SolrClient {
     boolean addSingle(SolrInputDocument document);
 
     /**
-     * 增加单条索引数据(vo)
+     * 增加单条索引数据
      *
      * @param object 待添加对象
      * @return 操作是否成功
@@ -34,12 +34,20 @@ public interface SolrClient {
     boolean addSingle(Object object);
 
     /**
-     * 增加多条索引数据(documents)
+     * 增加多条索引数据
      *
      * @param documents 待添加文档集合
      * @return 操作是否成功
      */
     boolean addMulti(List<SolrInputDocument> documents);
+
+    /**
+     * 增加多条索引数据
+     *
+     * @param lists 待添加集合
+     * @return 操作是否成功
+     */
+    boolean addMulti4VO(List<Object> lists);
 
     /**
      * 根据查询条件sq删除索引,sq必须符合solr语法
@@ -50,7 +58,7 @@ public interface SolrClient {
     boolean delete(String sq);
 
     /**
-     * 查询(返回值为solr原生返回值QueryResponse)
+     * 查询
      *
      * @param sq 查询条件
      * @return 查询结果
@@ -58,7 +66,7 @@ public interface SolrClient {
     QueryResponse query(SolrQuery sq);
 
     /**
-     * 查询(返回值为传入clazz的list)
+     * 查询
      *
      * @param queryObj 查询条件对象
      * @param clazz    结果集合对象class
@@ -67,7 +75,7 @@ public interface SolrClient {
     <T> List<T> query(Object queryObj, Class<T> clazz);
 
     /**
-     * 查询count
+     * count
      *
      * @param solrQuery 查询条件
      * @return count
@@ -75,12 +83,30 @@ public interface SolrClient {
     Long count(SolrQuery solrQuery);
 
     /**
-     * 查询count
+     * count
      *
      * @param object 查询条件对象
      * @return count
      */
     Long count(Object object);
+
+    /**
+     * sum
+     *
+     * @param sq     查询条件
+     * @param fields 待求和字段
+     * @return sum的结果
+     */
+    Map<String, Long> sum(SolrQuery sq, String... fields);
+
+    /**
+     * sum
+     *
+     * @param object 查询条件对象
+     * @param fields 待求和字段
+     * @return sum的结果
+     */
+    Map<String, Long> sum(Object object, String... fields);
 
     /**
      * 聚合(min、max、avg、count、sum)目前只支持sum
@@ -101,5 +127,4 @@ public interface SolrClient {
      * @return sum的结果
      */
     Map<String, Long> aggregate(AggregateEnum agg, Object object, String... fields);
-
 }

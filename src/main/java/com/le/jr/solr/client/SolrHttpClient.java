@@ -42,26 +42,21 @@ public class SolrHttpClient implements SolrClient {
         try {
             // 提交索引
             UpdateResponse res = masterServer.add(document);
-
             //如果客户端没有设置自定提交，默认不是自动提交
             if (autoCommit == null) {
                 autoCommit = Boolean.FALSE;
             }
-
             if (!autoCommit) {
                 // 第一个参数：是否等待solr从内存把数据刷入硬盘再返回结果，如果只刷入硬盘查询不到
                 // 第二个参数：是否等待solr从内存把数据刷入searcher再返回结果，刷入searcher才可以查询到
                 masterServer.commit(true, false);
             }
-
             if (res.getQTime() > 300) {
                 logger.warn("addSingleIndex 提交索引耗时：" + res.getQTime());
             }
-
         } catch (Exception e) {
-            throw new RuntimeException("单条索引异常!", e);
+            throw new SolrException("单条索引异常!", e);
         }
-
         return Boolean.TRUE;
     }
 
@@ -76,10 +71,8 @@ public class SolrHttpClient implements SolrClient {
         SolrServer masterServer = solrServerGroup.getMasterServer();
 
         try {
-
             // 提交索引
             UpdateResponse res = masterServer.add(documents);
-
             //如果客户端没有设置自定提交，默认不是自动提交
             if (autoCommit == null) {
                 autoCommit = Boolean.FALSE;
@@ -90,15 +83,19 @@ public class SolrHttpClient implements SolrClient {
                 // 第二个参数：是否等待solr从内存把数据刷入searcher再返回结果，刷入searcher才可以查询到
                 masterServer.commit(true, false);
             }
-
             if (res.getQTime() > 300) {
                 logger.warn("addMultipleIndex 提交索引耗时：" + res.getQTime());
             }
-
         } catch (Exception e) {
-            throw new RuntimeException("批量索引异常!size:" + documents.size(), e);
+            throw new SolrException("批量索引异常!size:" + documents.size(), e);
         }
         return Boolean.TRUE;
+    }
+
+    @Override
+    public boolean addMulti4VO(List<Object> lists) {
+        List<SolrInputDocument> documents = SolrUtils.list2Solrdoclist(lists);
+        return this.addMulti(documents);
     }
 
     @Override
@@ -111,9 +108,8 @@ public class SolrHttpClient implements SolrClient {
             // 执行查询
             res = slaveServer.query(sq);
             return res;
-
         } catch (Exception e) {
-            throw new RuntimeException("查询索引列表异常!", e);
+            throw new SolrException("查询索引列表异常!", e);
         }
     }
 
@@ -121,14 +117,13 @@ public class SolrHttpClient implements SolrClient {
     public <T> List<T> query(Object queryObj, Class<T> clazz) {
         // 把传入对象转换成SolrQuery
         SolrQuery solrQuery = SolrUtils.vo2SolrQuery(queryObj, OperateEnum.QUERY);
-
         QueryResponse res = this.query(solrQuery);
         SolrDocumentList sdl;
         try {
             sdl = res.getResults();
             return SolrUtils.queryResponse2List(sdl, clazz);
         } catch (Exception e) {
-            throw new RuntimeException("查询索引列表异常!", e);
+            throw new SolrException("查询索引列表异常!", e);
         }
     }
 
@@ -146,15 +141,23 @@ public class SolrHttpClient implements SolrClient {
     }
 
     @Override
+    public Map<String, Long> sum(SolrQuery sq, String... fields) {
+        return this.aggregate(AggregateEnum.SUM, sq, fields);
+    }
+
+    @Override
+    public Map<String, Long> sum(Object object, String... fields) {
+        return this.aggregate(AggregateEnum.SUM, object, fields);
+    }
+
+    @Override
     public boolean delete(String sq) {
         // 根据配置文件策略选取slave dataSource
         SolrServer masterServer = solrServerGroup.getMasterServer();
         UpdateResponse res;
 
         try {
-
             res = masterServer.deleteByQuery(sq);
-
             //如果客户端没有设置自定提交，默认不是自动提交
             if (autoCommit == null) {
                 autoCommit = Boolean.FALSE;
@@ -165,13 +168,11 @@ public class SolrHttpClient implements SolrClient {
                 // 第二个参数：是否等待solr从内存把数据刷入searcher再返回结果，刷入searcher才可以查询到
                 masterServer.commit(true, false);
             }
-
             if (res.getQTime() > 300) {
                 logger.warn("delete 删除索引耗时：" + res.getQTime());
             }
-
         } catch (Exception e) {
-            throw new RuntimeException("删除索引列表异常!", e);
+            throw new SolrException("删除索引列表异常!", e);
         }
         return Boolean.TRUE;
     }
@@ -181,7 +182,6 @@ public class SolrHttpClient implements SolrClient {
         if (fields == null || fields.length < 1) {
             throw new SolrException(ExceptionCode.SOLR_AGGREGATEFIELDISNULL_EXCEPTION.getMessage());
         }
-
         Map<String, Long> map = new HashMap<>();
         // 利用StatsComponent实现数据库的聚合统计查询，也就是min、max、avg、count、sum的功能
         // 是否开启stats（true/false）
@@ -199,7 +199,6 @@ public class SolrHttpClient implements SolrClient {
         try {
             for (String field : fields) {
                 fieldStatsInfo = fieldStatsInfoMap.get(field);
-
                 // 获取聚合值，并转换成long
                 if (AggregateEnum.SUM.equals(agg)) {
                     aggStr = fieldStatsInfo.getSum().toString();
@@ -212,7 +211,6 @@ public class SolrHttpClient implements SolrClient {
         } finally {
             return map;
         }
-
     }
 
     @Override
