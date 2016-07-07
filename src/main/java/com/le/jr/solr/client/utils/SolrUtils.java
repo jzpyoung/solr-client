@@ -1,11 +1,10 @@
 package com.le.jr.solr.client.utils;
 
-import com.google.common.collect.Lists;
-import com.le.jr.solr.client.SolrVoDemo;
 import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.build.CommonBuilder;
 import com.le.jr.solr.client.build.Director;
+import com.le.jr.solr.client.common.constant.SolrConstant;
 import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.common.enums.ScopeEnum;
 import com.le.jr.solr.client.common.enums.ZeroOneEnum;
@@ -99,6 +98,13 @@ public class SolrUtils {
      * @return SolrQuery
      */
     public static SolrQuery vo2SolrQuery(Object object, OperateEnum operateEnum) {
+        if (Objects.equals(object, null)) {
+            SolrQuery solrQuery = new SolrQuery();
+            solrQuery.addField(SolrConstant.star);
+            solrQuery.setQuery(SolrConstant.queryStr);
+            return solrQuery;
+        }
+
         // 初始化指挥者类
         Director director = new Director();
         // 初始化建造者类
@@ -169,13 +175,6 @@ public class SolrUtils {
     }
 
     public static void main(String[] args) {
-        List<Integer> list = Lists.newArrayList();
-        list.add(1);
-        list.add(2);
-        SolrVoDemo demo = new SolrVoDemo();
-        demo.setName("jzp");
-        demo.setOrderList(list);
-        demo.setStartTime(new Date());
-        SolrUtils.vo2SolrQuery(demo,OperateEnum.QUERY);
+        SolrUtils.vo2SolrQuery(null, OperateEnum.QUERY);
     }
 }

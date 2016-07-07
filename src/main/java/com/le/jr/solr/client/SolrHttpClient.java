@@ -1,19 +1,20 @@
 package com.le.jr.solr.client;
 
+import com.google.common.collect.Maps;
 import com.le.jr.solr.client.common.code.ExceptionCode;
 import com.le.jr.solr.client.common.enums.AggregateEnum;
 import com.le.jr.solr.client.common.enums.OperateEnum;
+import com.le.jr.solr.client.common.enums.ZeroOneEnum;
 import com.le.jr.solr.client.datasource.SolrServerGroup;
 import com.le.jr.solr.client.exceptions.SolrException;
 import com.le.jr.solr.client.utils.SolrUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.response.FieldStatsInfo;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.response.UpdateResponse;
+import org.apache.solr.client.solrj.response.*;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.params.GroupParams;
 
 import java.util.HashMap;
 import java.util.List;
@@ -217,6 +218,47 @@ public class SolrHttpClient implements SolrClient {
     public Map<String, Long> aggregate(AggregateEnum agg, Object object, String... fields) {
         SolrQuery solrQuery = SolrUtils.vo2SolrQuery(object, OperateEnum.QUERY);
         return this.aggregate(agg, solrQuery, fields);
+    }
+
+    @Override
+    public Map<String, Long> group(SolrQuery solrQuery, String field) {
+        Map<String, Long> result = Maps.newHashMap();
+
+        // 根据配置文件策略选取slave dataSource
+        SolrServer slaveServer = solrServerGroup.getSlaveServer();
+
+        solrQuery.setParam(GroupParams.GROUP, true);
+        solrQuery.setParam(GroupParams.GROUP_FIELD, field);
+        solrQuery.setParam(GroupParams.GROUP_LIMIT, ZeroOneEnum.ZERO.toString());
+
+        QueryResponse response;
+        try {
+            response = slaveServer.query(solrQuery);
+
+            if (response != null) {
+                GroupResponse groupResponse = response.getGroupResponse();
+                if (groupResponse != null) {
+                    List<GroupCommand> groupList = groupResponse.getValues();
+                    for (GroupCommand groupCommand : groupList) {
+                        List<Group> groups = groupCommand.getValues();
+                        for (Group group : groups) {
+                            result.put(group.getGroupValue(), group.getResult().getNumFound());
+                        }
+                    }
+                }
+            }
+
+            return result;
+        } catch (Exception e) {
+            throw new SolrException("GROUPBY异常!", e);
+        }
+    }
+
+    @Override
+    public Map<String, Long> group(Object object, String field) {
+        // 把传入对象转换成SolrQuery
+        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(object, OperateEnum.QUERY);
+        return this.group(solrQuery, field);
     }
 
     /**

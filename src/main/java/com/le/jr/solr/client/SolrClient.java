@@ -127,4 +127,22 @@ public interface SolrClient {
      * @return sum的结果
      */
     Map<String, Long> aggregate(AggregateEnum agg, Object object, String... fields);
+
+    /**
+     * group by
+     *
+     * @param solrQuery 查询条件
+     * @param field     groupby字段
+     * @return groupby的结果
+     */
+    Map<String, Long> group(SolrQuery solrQuery, String field);
+
+    /**
+     * group by
+     *
+     * @param object 查询条件对象
+     * @param field     groupby字段
+     * @return groupby的结果
+     */
+    Map<String, Long> group(Object object, String field);
 }
