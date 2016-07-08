@@ -4,7 +4,6 @@ import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.build.CommonBuilder;
 import com.le.jr.solr.client.build.Director;
-import com.le.jr.solr.client.common.constant.SolrConstant;
 import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.common.enums.ScopeEnum;
 import com.le.jr.solr.client.common.enums.ZeroOneEnum;
@@ -15,7 +14,10 @@ import org.apache.solr.common.SolrInputDocument;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.GT;
 import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.LT;
