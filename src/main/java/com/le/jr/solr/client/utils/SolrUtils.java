@@ -98,13 +98,6 @@ public class SolrUtils {
      * @return SolrQuery
      */
     public static SolrQuery vo2SolrQuery(Object object, OperateEnum operateEnum) {
-        if (Objects.equals(object, null)) {
-            SolrQuery solrQuery = new SolrQuery();
-            solrQuery.addField(SolrConstant.star);
-            solrQuery.setQuery(SolrConstant.queryStr);
-            return solrQuery;
-        }
-
         // 初始化指挥者类
         Director director = new Director();
         // 初始化建造者类
