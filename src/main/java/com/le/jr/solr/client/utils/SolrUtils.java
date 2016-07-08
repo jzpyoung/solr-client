@@ -173,8 +173,4 @@ public class SolrUtils {
         }
         return true;
     }
-
-    public static void main(String[] args) {
-        SolrUtils.vo2SolrQuery(null, OperateEnum.QUERY);
-    }
 }

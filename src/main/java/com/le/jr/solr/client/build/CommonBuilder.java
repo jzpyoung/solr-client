@@ -116,7 +116,7 @@ public class CommonBuilder extends Builder {
                     }
                     inStr = inStr + inEach;
                 }
-                str.append(field.getAnnotation(InField.class).name() + SolrConstant.colon + inStr);
+                str.append(field.getAnnotation(InField.class).name() + SolrConstant.colon + SolrConstant.miniBracketLeft + inStr + SolrConstant.miniBracketRight);
                 andTime++;
             }
             return;

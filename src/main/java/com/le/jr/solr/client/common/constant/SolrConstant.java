@@ -27,4 +27,7 @@ public class SolrConstant {
 
     public static final String bracketRight = "]";
 
+    public static final String miniBracketLeft = "(";
+
+    public static final String miniBracketRight = ")";
 }
