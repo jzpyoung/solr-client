@@ -16,16 +16,6 @@ import java.util.Map;
 public abstract class Builder {
 
     /**
-     * builder entry
-     *
-     * @param field
-     * @param object
-     * @param operateEnum
-     * @throws IllegalAccessException
-     */
-    public abstract void buildQuery(Field field, Object object, OperateEnum operateEnum, Map<String, Object> map) throws IllegalAccessException;
-
-    /**
      * builder scope
      *
      * @param field

@@ -39,15 +39,6 @@ public class CommonBuilder extends Builder {
     }
 
     @Override
-    public void buildQuery(Field field, Object object, OperateEnum operateEnum, Map<String, Object> map) throws IllegalAccessException {
-        if (OperateEnum.SCOPE.equals(operateEnum)) {
-            this.buildScope(field, object, map);
-        } else {
-            this.buildPage(field, object, operateEnum);
-        }
-    }
-
-    @Override
     public void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException {
         if (andTime != ZeroOneEnum.ZERO.getValue()) {
             str.append(SolrConstant.andStr);

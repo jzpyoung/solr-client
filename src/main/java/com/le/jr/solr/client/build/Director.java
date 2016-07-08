@@ -14,8 +14,18 @@ import java.util.Map;
  */
 public class Director {
 
-    public void construct(Builder bulider, Field field, Object object, OperateEnum operateEnum, Map<String, Object> map) throws IllegalAccessException {
-        bulider.buildQuery(field, object, operateEnum, map);
+    /**
+     * build scope
+     */
+    public void constructScope(Builder bulider, Field field, Object object, Map<String, Object> map) throws IllegalAccessException {
+        bulider.buildScope(field, object, map);
+    }
+
+    /**
+     * build common
+     */
+    public void constructCommon(Builder bulider, Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
+        bulider.buildPage(field, object, operateEnum);
     }
 
 }

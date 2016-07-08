@@ -1,6 +1,9 @@
 package com.le.jr.solr.client.utils;
 
+import com.google.common.collect.Lists;
+import com.le.jr.solr.client.SolrVoDemo;
 import com.le.jr.solr.client.annotation.IgnoreField;
+import com.le.jr.solr.client.annotation.InField;
 import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.build.CommonBuilder;
 import com.le.jr.solr.client.build.Director;
@@ -133,9 +136,9 @@ public class SolrUtils {
             try {
                 // 指挥者执行builder
                 if (field.isAnnotationPresent(ScopeField.class)) {
-                    director.construct(builder, field, object, OperateEnum.SCOPE, scopeMap);
+                    director.constructScope(builder, field, object, scopeMap);
                 } else {
-                    director.construct(builder, field, object, operateEnum, new HashMap<String, Object>());
+                    director.constructCommon(builder, field, object, operateEnum);
                 }
 
             } catch (Exception e) {
