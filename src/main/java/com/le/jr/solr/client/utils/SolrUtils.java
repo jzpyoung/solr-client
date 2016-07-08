@@ -1,9 +1,6 @@
 package com.le.jr.solr.client.utils;
 
-import com.google.common.collect.Lists;
-import com.le.jr.solr.client.SolrVoDemo;
 import com.le.jr.solr.client.annotation.IgnoreField;
-import com.le.jr.solr.client.annotation.InField;
 import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.build.CommonBuilder;
 import com.le.jr.solr.client.build.Director;
