@@ -3,6 +3,7 @@ package com.le.jr.solr.client.build;
 import com.le.jr.solr.client.annotation.InField;
 import com.le.jr.solr.client.annotation.PageField;
 import com.le.jr.solr.client.annotation.ScopeField;
+import com.le.jr.solr.client.annotation.SortField;
 import com.le.jr.solr.client.common.constant.SolrConstant;
 import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.common.enums.ScopeEnum;
@@ -31,11 +32,11 @@ public class CommonBuilder extends Builder {
     private StringBuilder str = new StringBuilder();
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private int andTime = ZeroOneEnum.ZERO.getValue();
-    private static final ThreadLocal<Calendar> calendar = new ThreadLocal<>();
+    private static Calendar calendar;
 
     static {
-        calendar.set(Calendar.getInstance());
-        calendar.get().add(Calendar.HOUR, -8);
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, -8);
     }
 
     @Override
@@ -47,8 +48,8 @@ public class CommonBuilder extends Builder {
         if (scopeStart == null) {
             scopeStart = SolrConstant.star;
         } else if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
-            calendar.get().setTime((Date) scopeStart);
-            scopeStart = dateFormat.format(calendar.get().getTime());
+            calendar.setTime((Date) scopeStart);
+            scopeStart = dateFormat.format(calendar.getTime());
         }
 
 
@@ -56,8 +57,8 @@ public class CommonBuilder extends Builder {
         if (scopeEnd == null) {
             scopeEnd = SolrConstant.star;
         } else if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
-            calendar.get().setTime((Date) scopeEnd);
-            scopeEnd = dateFormat.format(calendar.get().getTime());
+            calendar.setTime((Date) scopeEnd);
+            scopeEnd = dateFormat.format(calendar.getTime());
         }
         str.append(field.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft + scopeStart + SolrConstant.toStr + scopeEnd + SolrConstant.bracketRight);
         andTime++;
@@ -82,7 +83,6 @@ public class CommonBuilder extends Builder {
             }
             return;
         }
-
         this.buildIn(field, object);
     }
 
@@ -102,13 +102,31 @@ public class CommonBuilder extends Builder {
                         inStr = inStr + SolrConstant.orStr;
                     }
                     if (inEach instanceof Date) {
-                        calendar.get().setTime((Date) inEach);
-                        inEach = dateFormat.format(calendar.get().getTime());
+                        calendar.setTime((Date) inEach);
+                        inEach = dateFormat.format(calendar.getTime());
                     }
                     inStr = inStr + inEach;
                 }
                 str.append(field.getAnnotation(InField.class).name() + SolrConstant.colon + SolrConstant.miniBracketLeft + inStr + SolrConstant.miniBracketRight);
                 andTime++;
+            }
+            return;
+        }
+        this.buildSort(field, object);
+    }
+
+    @Override
+    public void buildSort(Field field, Object object) throws IllegalAccessException {
+        if (field.isAnnotationPresent(SortField.class)) {
+            switch (field.getAnnotation(SortField.class).mode()) {
+                case ASC:
+                    solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.asc);
+                    break;
+                case DESC:
+                    solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.desc);
+                    break;
+                default:
+                    break;
             }
             return;
         }

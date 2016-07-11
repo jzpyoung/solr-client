@@ -43,6 +43,15 @@ public abstract class Builder {
     public abstract void buildIn(Field field, Object object) throws IllegalAccessException;
 
     /**
+     * builder sort
+     *
+     * @param field
+     * @param object
+     * @throws IllegalAccessException
+     */
+    public abstract void buildSort(Field field, Object object) throws IllegalAccessException;
+
+    /**
      * builder common
      *
      * @param field

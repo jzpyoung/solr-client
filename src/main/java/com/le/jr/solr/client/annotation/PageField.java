@@ -21,12 +21,8 @@ public @interface PageField {
     enum PageFiledEnum {
         // 每页记录数
         PAGESIZE,
-
         // 起始值
-        START;
-
-        PageFiledEnum() {
-        }
+        START
     }
 }
 

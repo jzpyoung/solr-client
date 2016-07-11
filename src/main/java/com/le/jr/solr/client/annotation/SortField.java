@@ -6,24 +6,21 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 对象转换solr查询条件范围参数注解
+ * 对象转换solr查询条件排序注解
  *
  * @author jiazhipeng
  * @version 1.0
- * @date 2016-06-23
+ * @date 2016-07-11
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ScopeField {
+public @interface SortField {
 
     String name() default "";
 
-    ScopeFiledEnum mode() default ScopeFiledEnum.LT;
+    SortFiledEnum mode() default SortFiledEnum.ASC;
 
-    enum ScopeFiledEnum {
-        // 小于
-        LT,
-        // 大于
-        GT
+    enum SortFiledEnum {
+        ASC, DESC
     }
 }

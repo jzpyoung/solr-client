@@ -1,9 +1,6 @@
 package com.le.jr.solr.client;
 
-import com.le.jr.solr.client.annotation.IgnoreField;
-import com.le.jr.solr.client.annotation.InField;
-import com.le.jr.solr.client.annotation.PageField;
-import com.le.jr.solr.client.annotation.ScopeField;
+import com.le.jr.solr.client.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -37,6 +34,12 @@ public class SolrVoDemo {
 
     @InField(name = "time")
     private List<Date> timeList;
+
+    @SortField(name = "orderTime", mode = SortField.SortFiledEnum.DESC)
+    private String sort1;
+
+    @SortField(name = "venderCode", mode = SortField.SortFiledEnum.ASC)
+    private String sort2;
 
     private String name;
 
@@ -110,6 +113,22 @@ public class SolrVoDemo {
 
     public void setTimeList(List<Date> timeList) {
         this.timeList = timeList;
+    }
+
+    public String getSort1() {
+        return sort1;
+    }
+
+    public void setSort1(String sort1) {
+        this.sort1 = sort1;
+    }
+
+    public String getSort2() {
+        return sort2;
+    }
+
+    public void setSort2(String sort2) {
+        this.sort2 = sort2;
     }
 
     @Override
