@@ -5,6 +5,7 @@ import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.build.CommonBuilder;
 import com.le.jr.solr.client.build.Director;
+import com.le.jr.solr.client.common.constant.SolrConstant;
 import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.common.enums.ScopeEnum;
 import com.le.jr.solr.client.common.enums.ZeroOneEnum;
@@ -12,7 +13,6 @@ import com.le.jr.solr.client.exceptions.SolrException;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.util.DateUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -171,9 +171,11 @@ public class SolrUtils {
     public static void main(String[] args) {
         SolrVoDemo demo = new SolrVoDemo();
         demo.setStartTime(new Date());
-        demo.setEndTime(new Date(2016,5,7));
+        demo.setEndTime(new Date(2016, 5, 7));
         demo.setSort1("条件1");
         demo.setSort2("条件2");
-        SolrUtils.vo2SolrQuery(demo,OperateEnum.QUERY);
+        demo.setPageSize(10);
+        demo.setName(SolrConstant.star + "a" + SolrConstant.star);
+        SolrUtils.vo2SolrQuery(demo, OperateEnum.QUERY);
     }
 }

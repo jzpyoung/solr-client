@@ -43,22 +43,6 @@ public class SolrVoDemo {
 
     private String name;
 
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getStart() {
-        return start;
-    }
-
-    public void setStart(int start) {
-        this.start = start;
-    }
-
     public String getLetvUserId() {
         return letvUserId;
     }
