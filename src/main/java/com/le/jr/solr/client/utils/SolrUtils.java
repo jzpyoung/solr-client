@@ -1,11 +1,10 @@
 package com.le.jr.solr.client.utils;
 
-import com.le.jr.solr.client.SolrVoDemo;
 import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.ScopeField;
+import com.le.jr.solr.client.build.Builder;
 import com.le.jr.solr.client.build.CommonBuilder;
 import com.le.jr.solr.client.build.Director;
-import com.le.jr.solr.client.common.constant.SolrConstant;
 import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.common.enums.ScopeEnum;
 import com.le.jr.solr.client.common.enums.ZeroOneEnum;
@@ -16,7 +15,10 @@ import org.apache.solr.common.SolrInputDocument;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.GT;
 import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.LT;
@@ -102,7 +104,7 @@ public class SolrUtils {
         // 初始化指挥者类
         Director director = new Director();
         // 初始化建造者类
-        CommonBuilder builder = new CommonBuilder();
+        Builder builder = new CommonBuilder();
         Field[] fields = object.getClass().getDeclaredFields();
         int modifiers;
         Object fValue;
@@ -129,9 +131,8 @@ public class SolrUtils {
                 if (field.isAnnotationPresent(ScopeField.class)) {
                     director.constructScope(builder, field, object, scopeMap);
                 } else {
-                    director.constructCommon(builder, field, object, operateEnum);
+                    director.constructOther(builder, field, object, operateEnum);
                 }
-
             } catch (Exception e) {
                 throw new SolrException(e);
             }
@@ -166,16 +167,5 @@ public class SolrUtils {
             }
         }
         return true;
-    }
-
-    public static void main(String[] args) {
-        SolrVoDemo demo = new SolrVoDemo();
-        demo.setStartTime(new Date());
-        demo.setEndTime(new Date(2016, 5, 7));
-        demo.setSort1("条件1");
-        demo.setSort2("条件2");
-        demo.setPageSize(10);
-        demo.setName(SolrConstant.star + "a" + SolrConstant.star);
-        SolrUtils.vo2SolrQuery(demo, OperateEnum.QUERY);
     }
 }

@@ -34,6 +34,15 @@ public abstract class Builder {
     public abstract void buildPage(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException;
 
     /**
+     * builder sort
+     *
+     * @param field
+     * @param object
+     * @throws IllegalAccessException
+     */
+    public abstract void buildSort(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException;
+
+    /**
      * builder in
      *
      * @param field
@@ -41,15 +50,6 @@ public abstract class Builder {
      * @throws IllegalAccessException
      */
     public abstract void buildIn(Field field, Object object) throws IllegalAccessException;
-
-    /**
-     * builder sort
-     *
-     * @param field
-     * @param object
-     * @throws IllegalAccessException
-     */
-    public abstract void buildSort(Field field, Object object) throws IllegalAccessException;
 
     /**
      * builder common

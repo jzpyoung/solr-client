@@ -179,6 +179,13 @@ public class SolrHttpClient implements SolrClient {
     }
 
     @Override
+    public boolean delete(Object object) {
+        // 把传入对象转换成SolrQuery
+        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(object, OperateEnum.DELETE);
+        return this.delete(solrQuery.getQuery());
+    }
+
+    @Override
     public Map<String, Long> aggregate(AggregateEnum agg, SolrQuery sq, String... fields) {
         if (fields == null || fields.length < 1) {
             throw new SolrException(ExceptionCode.SOLR_AGGREGATEFIELDISNULL_EXCEPTION.getMessage());

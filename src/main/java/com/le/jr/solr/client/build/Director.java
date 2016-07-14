@@ -22,9 +22,9 @@ public class Director {
     }
 
     /**
-     * build common
+     * build other
      */
-    public void constructCommon(Builder bulider, Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
+    public void constructOther(Builder bulider, Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
         bulider.buildPage(field, object, operateEnum);
     }
 }

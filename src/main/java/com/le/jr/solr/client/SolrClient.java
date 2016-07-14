@@ -50,12 +50,20 @@ public interface SolrClient {
     boolean addMulti4VO(List<Object> lists);
 
     /**
-     * 根据查询条件sq删除索引,sq必须符合solr语法
+     * 删除索引
      *
-     * @param sq 查询条件
+     * @param sq 删除条件
      * @return 操作是否成功
      */
     boolean delete(String sq);
+
+    /**
+     * 删除索引
+     *
+     * @param object 删除条件对象
+     * @return 操作是否成功
+     */
+    boolean delete(Object object);
 
     /**
      * 查询
@@ -141,7 +149,7 @@ public interface SolrClient {
      * group by
      *
      * @param object 查询条件对象
-     * @param field     groupby字段
+     * @param field  groupby字段
      * @return groupby的结果
      */
     Map<String, Long> group(Object object, String field);

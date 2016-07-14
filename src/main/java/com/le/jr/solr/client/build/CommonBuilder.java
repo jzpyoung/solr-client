@@ -67,7 +67,7 @@ public class CommonBuilder extends Builder {
     @Override
     public void buildPage(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
         if (field.isAnnotationPresent(PageField.class)) {
-            if (OperateEnum.COUNT.equals(operateEnum)) {
+            if (!OperateEnum.QUERY.equals(operateEnum)) {
                 return;
             }
 
@@ -79,6 +79,29 @@ public class CommonBuilder extends Builder {
                     solrQuery.setStart(Fields.get(object, field, Integer.class));
                     break;
                 default:
+                    break;
+            }
+            return;
+        }
+        this.buildSort(field, object, operateEnum);
+    }
+
+    @Override
+    public void buildSort(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
+        if (field.isAnnotationPresent(SortField.class)) {
+            if (!OperateEnum.QUERY.equals(operateEnum)) {
+                return;
+            }
+
+            switch (field.getAnnotation(SortField.class).mode()) {
+                case ASC:
+                    solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.asc);
+                    break;
+                case DESC:
+                    solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.desc);
+                    break;
+                default:
+                    solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.asc);
                     break;
             }
             return;
@@ -109,24 +132,6 @@ public class CommonBuilder extends Builder {
                 }
                 str.append(field.getAnnotation(InField.class).name() + SolrConstant.colon + SolrConstant.miniBracketLeft + inStr + SolrConstant.miniBracketRight);
                 andTime++;
-            }
-            return;
-        }
-        this.buildSort(field, object);
-    }
-
-    @Override
-    public void buildSort(Field field, Object object) throws IllegalAccessException {
-        if (field.isAnnotationPresent(SortField.class)) {
-            switch (field.getAnnotation(SortField.class).mode()) {
-                case ASC:
-                    solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.asc);
-                    break;
-                case DESC:
-                    solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.desc);
-                    break;
-                default:
-                    break;
             }
             return;
         }
