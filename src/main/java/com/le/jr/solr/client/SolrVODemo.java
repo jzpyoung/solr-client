@@ -14,6 +14,11 @@ import java.util.List;
  */
 public class SolrVoDemo {
 
+    private String id;
+
+    @DimField
+    private String name;
+
     @PageField(name = PageField.PageFiledEnum.PAGESIZE)
     private Integer pageSize;
 
@@ -40,8 +45,6 @@ public class SolrVoDemo {
 
     @SortField(name = "venderCode", mode = SortField.SortFiledEnum.ASC)
     private String sort2;
-
-    private String name;
 
     public String getLetvUserId() {
         return letvUserId;
@@ -113,6 +116,22 @@ public class SolrVoDemo {
 
     public void setSort2(String sort2) {
         this.sort2 = sort2;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public Integer getStart() {
+        return start;
     }
 
     @Override

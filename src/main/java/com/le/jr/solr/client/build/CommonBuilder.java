@@ -1,9 +1,6 @@
 package com.le.jr.solr.client.build;
 
-import com.le.jr.solr.client.annotation.InField;
-import com.le.jr.solr.client.annotation.PageField;
-import com.le.jr.solr.client.annotation.ScopeField;
-import com.le.jr.solr.client.annotation.SortField;
+import com.le.jr.solr.client.annotation.*;
 import com.le.jr.solr.client.common.constant.SolrConstant;
 import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.common.enums.ScopeEnum;
@@ -143,7 +140,13 @@ public class CommonBuilder extends Builder {
         if (andTime != ZeroOneEnum.ZERO.getValue()) {
             str.append(SolrConstant.andStr);
         }
-        str.append(field.getName() + SolrConstant.colon + Fields.get(object, field));
+
+        if (field.isAnnotationPresent(DimField.class)) {
+            str.append(field.getName() + SolrConstant.colon + SolrConstant.star + Fields.get(object, field) + SolrConstant.star);
+        } else {
+            str.append(field.getName() + SolrConstant.colon + Fields.get(object, field));
+        }
+
         andTime++;
     }
 
