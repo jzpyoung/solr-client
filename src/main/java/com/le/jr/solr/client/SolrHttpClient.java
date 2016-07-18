@@ -236,7 +236,7 @@ public class SolrHttpClient implements SolrClient {
 
         solrQuery.setParam(GroupParams.GROUP, true);
         solrQuery.setParam(GroupParams.GROUP_FIELD, field);
-        solrQuery.setParam(GroupParams.GROUP_LIMIT, ZeroOneEnum.ZERO.toString());
+        solrQuery.setParam(GroupParams.GROUP_LIMIT, String.valueOf(ZeroOneEnum.ZERO.getValue()));
 
         QueryResponse response;
         try {
