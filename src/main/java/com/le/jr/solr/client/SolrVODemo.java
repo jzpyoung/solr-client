@@ -16,6 +16,8 @@ public class SolrVoDemo {
 
     private String id;
 
+    private Integer age;
+
     @DimField
     private String name;
 
@@ -132,6 +134,14 @@ public class SolrVoDemo {
 
     public Integer getStart() {
         return start;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     @Override

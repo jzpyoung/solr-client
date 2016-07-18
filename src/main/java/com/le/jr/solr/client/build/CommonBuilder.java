@@ -141,10 +141,26 @@ public class CommonBuilder extends Builder {
             str.append(SolrConstant.andStr);
         }
 
+        Object value = Fields.get(object, field);
+
+        if (value instanceof Integer) {
+            if ((int) value < 0) {
+                value = "\\" + Fields.get(object, field);
+            }
+        }  else if (value instanceof Double) {
+            if ((double) value < 0) {
+                value = "\\" + Fields.get(object, field);
+            }
+        } else if (value instanceof Float) {
+            if ((float) value < 0) {
+                value = "\\" + Fields.get(object, field);
+            }
+        }
+
         if (field.isAnnotationPresent(DimField.class)) {
-            str.append(field.getName() + SolrConstant.colon + SolrConstant.star + Fields.get(object, field) + SolrConstant.star);
+            str.append(field.getName() + SolrConstant.colon + SolrConstant.star + value + SolrConstant.star);
         } else {
-            str.append(field.getName() + SolrConstant.colon + Fields.get(object, field));
+            str.append(field.getName() + SolrConstant.colon + value);
         }
 
         andTime++;
