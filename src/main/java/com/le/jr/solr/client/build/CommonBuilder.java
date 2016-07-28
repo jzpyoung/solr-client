@@ -10,8 +10,6 @@ import org.apache.commons.lang.time.FastDateFormat;
 import org.apache.solr.client.solrj.SolrQuery;
 
 import java.lang.reflect.Field;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -28,37 +26,17 @@ public class CommonBuilder extends Builder {
 
     private SolrQuery solrQuery = new SolrQuery();
     private StringBuilder str = new StringBuilder();
-    private FastDateFormat dateFormat = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private int andTime = ZeroOneEnum.ZERO.getValue();
-    private static Calendar calendar;
-
-    static {
-        calendar = Calendar.getInstance();
-    }
 
     @Override
     public void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException {
         if (andTime != ZeroOneEnum.ZERO.getValue()) {
             str.append(SolrConstant.andStr);
         }
-        Object scopeStart = map.get(ScopeEnum.SCOPESTART.getValue());
-        if (scopeStart == null) {
-            scopeStart = SolrConstant.star;
-        } else if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
-            calendar.setTime((Date) scopeStart);
-            calendar.add(Calendar.HOUR, -8);
-            scopeStart = dateFormat.format(calendar.getTime());
-        }
 
+        Object scopeStart = buildScopeCond(ScopeEnum.SCOPESTART,field,map);
+        Object scopeEnd = buildScopeCond(ScopeEnum.SCOPEEND,field,map);
 
-        Object scopeEnd = map.get(ScopeEnum.SCOPEEND.getValue());
-        if (scopeEnd == null) {
-            scopeEnd = SolrConstant.star;
-        } else if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
-            calendar.setTime((Date) scopeEnd);
-            calendar.add(Calendar.HOUR, -8);
-            scopeEnd = dateFormat.format(calendar.getTime());
-        }
         str.append(field.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft + scopeStart + SolrConstant.toStr + scopeEnd + SolrConstant.bracketRight);
         andTime++;
     }
@@ -99,9 +77,6 @@ public class CommonBuilder extends Builder {
                 case DESC:
                     solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.desc);
                     break;
-                default:
-                    solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.asc);
-                    break;
             }
             return;
         }
@@ -124,9 +99,7 @@ public class CommonBuilder extends Builder {
                         inStr = inStr + SolrConstant.orStr;
                     }
                     if (inEach instanceof Date) {
-                        calendar.setTime((Date) inEach);
-                        calendar.add(Calendar.HOUR, -8);
-                        inEach = dateFormat.format(calendar.getTime());
+                        inEach = buildDate(inEach);
                     }
                     inStr = inStr + inEach;
                 }
@@ -146,19 +119,8 @@ public class CommonBuilder extends Builder {
 
         Object value = Fields.get(object, field);
 
-        if (value instanceof Integer) {
-            if ((int) value < 0) {
-                value = "\\" + Fields.get(object, field);
-            }
-        }  else if (value instanceof Double) {
-            if ((double) value < 0) {
-                value = "\\" + Fields.get(object, field);
-            }
-        } else if (value instanceof Float) {
-            if ((float) value < 0) {
-                value = "\\" + Fields.get(object, field);
-            }
-        }
+        // 处理负数
+        value = buildNegativeNumber(value, field, object);
 
         if (field.isAnnotationPresent(DimField.class)) {
             str.append(field.getName() + SolrConstant.colon + SolrConstant.star + value + SolrConstant.star);
