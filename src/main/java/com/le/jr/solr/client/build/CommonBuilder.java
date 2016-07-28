@@ -6,6 +6,7 @@ import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.common.enums.ScopeEnum;
 import com.le.jr.solr.client.common.enums.ZeroOneEnum;
 import com.le.jr.solr.client.utils.Fields;
+import org.apache.commons.lang.time.FastDateFormat;
 import org.apache.solr.client.solrj.SolrQuery;
 
 import java.lang.reflect.Field;
@@ -27,13 +28,12 @@ public class CommonBuilder extends Builder {
 
     private SolrQuery solrQuery = new SolrQuery();
     private StringBuilder str = new StringBuilder();
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private FastDateFormat dateFormat = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private int andTime = ZeroOneEnum.ZERO.getValue();
     private static Calendar calendar;
 
     static {
         calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR, -8);
     }
 
     @Override
@@ -46,6 +46,7 @@ public class CommonBuilder extends Builder {
             scopeStart = SolrConstant.star;
         } else if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
             calendar.setTime((Date) scopeStart);
+            calendar.add(Calendar.HOUR, -8);
             scopeStart = dateFormat.format(calendar.getTime());
         }
 
@@ -55,6 +56,7 @@ public class CommonBuilder extends Builder {
             scopeEnd = SolrConstant.star;
         } else if (SolrConstant.dateStr.equals(field.getGenericType().toString())) {
             calendar.setTime((Date) scopeEnd);
+            calendar.add(Calendar.HOUR, -8);
             scopeEnd = dateFormat.format(calendar.getTime());
         }
         str.append(field.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft + scopeStart + SolrConstant.toStr + scopeEnd + SolrConstant.bracketRight);
@@ -123,6 +125,7 @@ public class CommonBuilder extends Builder {
                     }
                     if (inEach instanceof Date) {
                         calendar.setTime((Date) inEach);
+                        calendar.add(Calendar.HOUR, -8);
                         inEach = dateFormat.format(calendar.getTime());
                     }
                     inStr = inStr + inEach;

@@ -16,10 +16,7 @@ import org.apache.solr.common.SolrInputDocument;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.GT;
 import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.LT;
@@ -168,5 +165,11 @@ public class SolrUtils {
             }
         }
         return true;
+    }
+
+    public static void main(String[] args) {
+        SolrVoDemo demo = new SolrVoDemo();
+        demo.setStartTime(new Date());
+        SolrUtils.vo2SolrQuery(demo,OperateEnum.QUERY);
     }
 }

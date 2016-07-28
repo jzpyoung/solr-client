@@ -42,8 +42,8 @@ public class SolrVoDemo {
     @InField(name = "time")
     private List<Date> timeList;
 
-    @SortField(name = "orderTime", mode = SortField.SortFiledEnum.DESC)
-    private String sort1;
+    @SortField(name = "memberTime", mode = SortField.SortFiledEnum.DESC)
+    private String sort1 = "111";
 
     @SortField(name = "venderCode", mode = SortField.SortFiledEnum.ASC)
     private String sort2;
