@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class SolrHttpClient implements SolrClient {
 
-    private final static Logger logger = Logger.getLogger(SolrHttpClient.class);
+    private final Logger logger = Logger.getLogger(this.getClass());
 
     // solr dataSource组，提供getMaster getSlave方法
     private SolrServerGroup solrServerGroup;
