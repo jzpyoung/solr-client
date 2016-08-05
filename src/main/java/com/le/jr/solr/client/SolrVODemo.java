@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class SolrVoDemo {
 
+    private int cardNum;
+
     private String id;
 
     private Integer age;
@@ -142,6 +144,14 @@ public class SolrVoDemo {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public int getCardNum() {
+        return cardNum;
+    }
+
+    public void setCardNum(int cardNum) {
+        this.cardNum = cardNum;
     }
 
     @Override

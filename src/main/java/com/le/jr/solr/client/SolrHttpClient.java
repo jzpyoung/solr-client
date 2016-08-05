@@ -94,7 +94,7 @@ public class SolrHttpClient implements SolrClient {
     }
 
     @Override
-    public boolean addMulti4VO(List<Object> lists) {
+    public boolean addMulti4VO(List<? extends Object> lists) {
         List<SolrInputDocument> documents = SolrUtils.list2Solrdoclist(lists);
         return this.addMulti(documents);
     }

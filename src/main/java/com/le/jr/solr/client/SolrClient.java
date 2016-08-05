@@ -47,7 +47,7 @@ public interface SolrClient {
      * @param lists 待添加集合
      * @return 操作是否成功
      */
-    boolean addMulti4VO(List<Object> lists);
+    boolean addMulti4VO(List<? extends Object> lists);
 
     /**
      * 删除索引

@@ -1,5 +1,6 @@
 package com.le.jr.solr.client.utils;
 
+import com.google.common.collect.Lists;
 import com.le.jr.solr.client.SolrVoDemo;
 import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.ScopeField;
@@ -170,6 +171,9 @@ public class SolrUtils {
     public static void main(String[] args) {
         SolrVoDemo demo = new SolrVoDemo();
         demo.setStartTime(new Date());
-        SolrUtils.vo2SolrQuery(demo,OperateEnum.QUERY);
+        demo.setCardNum(5);
+
+        SolrInputDocument solrInputDocument = SolrUtils.vo2Solrdoc(demo);
+        System.out.println();
     }
 }
