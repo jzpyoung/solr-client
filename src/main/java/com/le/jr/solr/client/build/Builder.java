@@ -58,6 +58,10 @@ public abstract class Builder {
             if ((float) obj < 0) {
                 obj = "\\" + Fields.get(object, field);
             }
+        } else if (obj instanceof Byte) {
+            if ((byte) obj < 0) {
+                obj = "\\" + Fields.get(object, field);
+            }
         }
         return obj;
     }

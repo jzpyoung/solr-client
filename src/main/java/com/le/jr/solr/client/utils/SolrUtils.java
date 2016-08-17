@@ -170,10 +170,9 @@ public class SolrUtils {
 
     public static void main(String[] args) {
         SolrVoDemo demo = new SolrVoDemo();
-        demo.setStartTime(new Date());
-        demo.setCardNum(5);
+        demo.setCardNum(-1);
 
-        SolrInputDocument solrInputDocument = SolrUtils.vo2Solrdoc(demo);
-        System.out.println();
+        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(demo, OperateEnum.QUERY);
+        System.out.println(solrQuery);
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class SolrVoDemo {
 
-    private int cardNum;
+    private Integer cardNum;
 
     private String id;
 

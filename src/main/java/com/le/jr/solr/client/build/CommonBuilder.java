@@ -1,5 +1,6 @@
 package com.le.jr.solr.client.build;
 
+import com.le.jr.solr.client.SolrVoDemo;
 import com.le.jr.solr.client.annotation.*;
 import com.le.jr.solr.client.common.constant.SolrConstant;
 import com.le.jr.solr.client.common.enums.OperateEnum;
