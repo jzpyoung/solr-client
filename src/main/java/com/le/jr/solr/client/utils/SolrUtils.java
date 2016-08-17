@@ -1,7 +1,5 @@
 package com.le.jr.solr.client.utils;
 
-import com.google.common.collect.Lists;
-import com.le.jr.solr.client.SolrVoDemo;
 import com.le.jr.solr.client.annotation.IgnoreField;
 import com.le.jr.solr.client.annotation.ScopeField;
 import com.le.jr.solr.client.build.Builder;
@@ -9,18 +7,16 @@ import com.le.jr.solr.client.build.CommonBuilder;
 import com.le.jr.solr.client.build.Director;
 import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.common.enums.ScopeEnum;
-import com.le.jr.solr.client.common.enums.ZeroOneEnum;
 import com.le.jr.solr.client.exceptions.SolrException;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import com.le.jr.solr.client.SolrVoDemo;
+import com.le.jr.solr.client.common.enums.ZeroOneEnum;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
-
-import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.GT;
-import static com.le.jr.solr.client.annotation.ScopeField.ScopeFiledEnum.LT;
 
 /**
  * solr工具类
@@ -142,12 +138,12 @@ public class SolrUtils {
 
     private static boolean judgeScopeBothNull(Field field, Object fValue, Map<String, Object> scopeMap) {
         int scope;
-        if (field.isAnnotationPresent(ScopeField.class) && GT.equals(field.getAnnotation(ScopeField.class).mode())) {
+        if (field.isAnnotationPresent(ScopeField.class) && ScopeField.ScopeFiledEnum.GT.equals(field.getAnnotation(ScopeField.class).mode())) {
             scopeMap.put(ScopeEnum.SCOPESTART.getValue(), fValue);
             scope = (int) scopeMap.get(ScopeEnum.SCOPE.getValue());
             scopeMap.put(ScopeEnum.SCOPE.getValue(), ++scope);
             return judgeScopeBothNullFlag(scopeMap);
-        } else if (field.isAnnotationPresent(ScopeField.class) && LT.equals(field.getAnnotation(ScopeField.class).mode())) {
+        } else if (field.isAnnotationPresent(ScopeField.class) && ScopeField.ScopeFiledEnum.LT.equals(field.getAnnotation(ScopeField.class).mode())) {
             scopeMap.put(ScopeEnum.SCOPEEND.getValue(), fValue);
             scope = (int) scopeMap.get(ScopeEnum.SCOPE.getValue());
             scopeMap.put(ScopeEnum.SCOPE.getValue(), ++scope);

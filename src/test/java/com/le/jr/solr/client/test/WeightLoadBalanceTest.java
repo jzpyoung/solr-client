@@ -4,8 +4,8 @@
 
 package com.le.jr.solr.client.test;
 
-import com.le.jr.solr.client.datasource.WeightSolrServer;
 import com.le.jr.solr.client.loadstrategic.WeightLoadBalance;
+import com.le.jr.solr.client.datasource.WeightSolrServer;
 import org.apache.solr.client.solrj.SolrServer;
 import org.junit.Assert;
 import org.junit.Test;

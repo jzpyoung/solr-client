@@ -7,11 +7,9 @@ import com.le.jr.solr.client.common.enums.OperateEnum;
 import com.le.jr.solr.client.common.enums.ScopeEnum;
 import com.le.jr.solr.client.common.enums.ZeroOneEnum;
 import com.le.jr.solr.client.utils.Fields;
-import org.apache.commons.lang.time.FastDateFormat;
 import org.apache.solr.client.solrj.SolrQuery;
 
 import java.lang.reflect.Field;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;

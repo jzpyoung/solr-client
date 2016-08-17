@@ -1,12 +1,12 @@
 package com.le.jr.solr.client;
 
 import com.google.common.collect.Maps;
-import com.le.jr.solr.client.common.code.ExceptionCode;
-import com.le.jr.solr.client.common.enums.AggregateEnum;
 import com.le.jr.solr.client.common.enums.OperateEnum;
-import com.le.jr.solr.client.common.enums.ZeroOneEnum;
 import com.le.jr.solr.client.datasource.SolrServerGroup;
 import com.le.jr.solr.client.exceptions.SolrException;
+import com.le.jr.solr.client.common.code.ExceptionCode;
+import com.le.jr.solr.client.common.enums.AggregateEnum;
+import com.le.jr.solr.client.common.enums.ZeroOneEnum;
 import com.le.jr.solr.client.utils.SolrUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
