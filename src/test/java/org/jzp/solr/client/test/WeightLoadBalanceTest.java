@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2016-2020 LEJR.COM All Right Reserved
- */
-
 package org.jzp.solr.client.test;
 
 import org.jzp.solr.client.loadstrategic.WeightLoadBalance;
