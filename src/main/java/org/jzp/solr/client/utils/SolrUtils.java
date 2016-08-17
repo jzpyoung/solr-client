@@ -1,5 +1,8 @@
 package org.jzp.solr.client.utils;
 
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
 import org.jzp.solr.client.SolrVoDemo;
 import org.jzp.solr.client.annotation.IgnoreField;
 import org.jzp.solr.client.annotation.ScopeField;
@@ -10,9 +13,6 @@ import org.jzp.solr.client.common.enums.OperateEnum;
 import org.jzp.solr.client.common.enums.ScopeEnum;
 import org.jzp.solr.client.common.enums.ZeroOneEnum;
 import org.jzp.solr.client.exceptions.SolrException;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrInputDocument;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
