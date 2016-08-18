@@ -13,7 +13,7 @@ spring配置文件配置：
    <property name="masterServer">
       <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
          <constructor-arg>
-            <value>http://10.11.147.40:6080/solr/collection2</value>
+            <value>http://ip:port/solr/collection2</value>
          </constructor-arg>
          <property name="connectionTimeout" value="1000" />
          <property name="soTimeout" value="1500" />
@@ -24,7 +24,7 @@ spring配置文件配置：
       <list>
          <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
             <constructor-arg>
-               <value>http://10.11.147.40:6080/solr/collection2</value>
+               <value>http://ip:port/solr/collection2</value>
             </constructor-arg>
             <property name="connectionTimeout" value="1000" />
             <property name="soTimeout" value="1500" />
@@ -32,7 +32,7 @@ spring配置文件配置：
  
 		 <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
             <constructor-arg>
-               <value>http://10.11.147.40:6080/solr/collection2</value>
+               <value>http://ip:port/solr/collection2</value>
             </constructor-arg>
             <property name="connectionTimeout" value="1000" />
             <property name="soTimeout" value="1500" />
@@ -54,7 +54,7 @@ spring配置文件配置：
    <property name="masterServer">
       <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
          <constructor-arg>
-            <value>http://10.11.147.40:6080/solr/collection2</value>
+            <value>http://ip:port/solr/collection2</value>
          </constructor-arg>
          <property name="connectionTimeout" value="1000" />
          <property name="soTimeout" value="1500" />
@@ -65,7 +65,7 @@ spring配置文件配置：
       <list>
          <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
             <constructor-arg>
-               <value>http://10.11.147.40:6080/solr/collection2</value>
+               <value>http://ip:port/solr/collection2</value>
             </constructor-arg>
             <property name="connectionTimeout" value="1000" />
             <property name="soTimeout" value="1500" />
@@ -73,7 +73,7 @@ spring配置文件配置：
  
 		 <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
             <constructor-arg>
-               <value>http://10.11.147.40:6080/solr/collection2</value>
+               <value>http://ip:port/solr/collection2</value>
             </constructor-arg>
             <property name="connectionTimeout" value="1000" />
             <property name="soTimeout" value="1500" />
@@ -95,7 +95,7 @@ spring配置文件配置：
    <property name="masterServer">
       <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
          <constructor-arg>
-            <value>http://10.11.147.40:6080/solr/collection2</value>
+            <value>http://ip:port/solr/collection2</value>
          </constructor-arg>
          <property name="connectionTimeout" value="1000" />
          <property name="soTimeout" value="1500" />
@@ -111,7 +111,7 @@ spring配置文件配置：
    			<constructor-arg index="1">
       			<bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
          			<constructor-arg>
-            			<value>http://10.11.147.40:6080/solr/collection2</value>
+            			<value>http://ip:port/solr/collection2</value>
          			</constructor-arg>
          			<property name="connectionTimeout" value="1000" />
          			<property name="soTimeout" value="1500" />
@@ -125,7 +125,7 @@ spring配置文件配置：
    			<constructor-arg index="1">
       			<bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
          			<constructor-arg>
-            			<value>http://10.11.147.40:6080/solr/collection2</value>
+            			<value>http://ip:port/solr/collection2</value>
          			</constructor-arg>
          			<property name="connectionTimeout" value="1000" />
          			<property name="soTimeout" value="1500" />
