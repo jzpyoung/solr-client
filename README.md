@@ -1,4 +1,5 @@
 # solr-client
+solr客户端
 #spring接入文档
 >##添加 solr-client 依赖：
 ```xml
