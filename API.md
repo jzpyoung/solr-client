@@ -6,10 +6,60 @@
 	+ 批量添加: <a href="#addMulti-api">AddMulti()</a>
 	+ 删除: <a href="#delete-api">Delete()</a>
 	+ 查询集合: <a href="#query-api">Query()</a>
-	+ 查询数量: <a href="#count">Count()</a>
-	+ 求和: <a href="#sum">Sum()</a>
+	+ 查询数量: <a href="#count-api">Count()</a>
+	+ 求和: <a href="#sum-api">Sum()</a>
 	+ 分组: <a href="#groupBy-api">GroupBy()</a>
 	+ 聚合: <a href="#aggregation-api">Aggregation()</a>
+
++ VO Demo:
+
+    ```Java
+    public class SolrVoDemo {
+ 
+    // 普通参数，id为solr schema的字段名称，name的value为对应的字段的值
+    private String id;
+ 
+    // 忽略的参数，不会转化为add或者query的条件
+    @IgnoreField
+    private String letvUserId;
+     
+    // 模糊查询参数，name为solr schema的字段名称，name的value为对应的字段的值
+    @DimField
+    private String name;
+ 
+    // 分页参数：一页几条
+    @PageField(name = PageField.PageFiledEnum.PAGESIZE)
+    private Integer pageSize;
+    
+    // 分页参数：从第几条开始，类似mysql的limit的第一个参数
+    @PageField(name = PageField.PageFiledEnum.START)
+    private Integer start;
+ 
+    // 范围查询参数，name为solr schema的字段名称，mode为操作，GT代表大于
+    @ScopeField(name = "createTime", mode = ScopeField.ScopeFiledEnum.GT)
+    private Date startTime;
+ 
+    // 范围查询参数，name为solr schema的字段名称，mode为操作，LT代表小于
+    @ScopeField(name = "createTime", mode = ScopeField.ScopeFiledEnum.LT)
+    private Date endTime;
+ 
+    // IN查询，name为solr schema的字段名称，userList为in的范围list
+    @InField(name = "time")
+    private List<Date> timeList;
+ 
+    // 排序，name为solr schema的字段名称，mode为操作，DESC代表降序
+    @SortField(name = "orderTime", mode = SortField.SortFiledEnum.DESC)
+    private String sort1 = "订单时间降序";
+     
+    // 排序，name为solr schema的字段名称，mode为操作，ASC代表升序
+    @SortField(name = "venderCode", mode = SortField.SortFiledEnum.ASC)
+    private String sort2 = "商户号升序";
+ 
+    /**
+     * getters && setters
+     */
+    }
+    ```
 	
 + **<a id="addSingle-api">单条添加AddSingle()</a>**:
 
