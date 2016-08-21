@@ -1,13 +1,4 @@
 # Spring接入文档
-+ 添加 solr-client 依赖：
-
-    ```xml
-    <dependency>
-        <groupId>com.le.jr</groupId>
-        <artifactId>solr-client</artifactId>
-        <version>1.0.4</version>
-    </dependency>
-    ```
 + spring配置文件配置：
 
     + 随机策略配置
