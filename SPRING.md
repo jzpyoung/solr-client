@@ -2,6 +2,7 @@
 + 依赖注入：
 
     ```Java
+    @Resource
     private SolrClient solrClient;
     ```
     
