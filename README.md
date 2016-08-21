@@ -170,6 +170,19 @@ solr客户端
     </bean>
     ```
     
++ 已实现的组件:
+
+	+ 单条添加: ``AddSingle()``
+	+ 批量添加: ``AddMulti()``
+	+ 删除: ``Delete()``
+	+ 查询集合: ``Query()``
+	+ 查询数量: ``Count()``
+	+ 求和: ``Sum()``
+	+ 分组: ``GroupBy()``
+	+ 聚合: ``Aggregation()``
+		
++ API文档[这里](API.md)。
+    
 + 历史版本:
 
 	+ 1.0.0:
