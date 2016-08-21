@@ -7,7 +7,7 @@ solr客户端
     <dependency>
         <groupId>com.le.jr</groupId>
         <artifactId>solr-client</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.4</version>
     </dependency>
     ```
 + spring配置文件配置：
