@@ -42,7 +42,7 @@
 
 	+ 1.0.3:
 
-	    + 增加GroupBy、Aggregation。
+	    + 增加GroupBy、Aggregation支持。
 
 	+ 1.0.4:
 
