@@ -1,4 +1,10 @@
 # Spring接入文档
++ 依赖注入：
+
+    ```Java
+    private SolrClient solrClient;
+    ```
+    
 + spring配置文件配置：
 
     + 随机策略配置
