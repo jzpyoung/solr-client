@@ -3,7 +3,7 @@
 
     ```xml
     <dependency>
-        <groupId>com.le.jr</groupId>
+        <groupId>org.jzp.code</groupId>
         <artifactId>solr-client</artifactId>
         <version>1.0.4</version>
     </dependency>
