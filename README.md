@@ -23,6 +23,10 @@
 + API文档[这里](API.md)。
  
 + SPRING接入文档[这里](SPRING.md)。
+
++ 其他相关文档
+
+	+ [Solr](http://lucene.apache.org/solr/4_2_1/)。
     
 + 历史版本:
 
