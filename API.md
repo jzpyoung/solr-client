@@ -13,8 +13,8 @@
 	
 + **<a id="addSingle-api">单条添加AddSingle()</a>**:
 
-	```java
-	  /**
+    ```java
+    /**
      * 增加单条索引数据
      *
      * @param document 待添加文档
@@ -22,19 +22,19 @@
      */
     boolean addSingle(SolrInputDocument document);
 	
-	 /**
+    /**
      * 增加单条索引数据
      *
      * @param object 待添加对象
      * @return 操作是否成功
      */
     boolean addSingle(Object object);
-	```
+    ```
 
 + **<a id="addMulti-api">批量添加AddMulti()</a>**:
 	
-	```java
-	  /**
+    ```java
+    /**
      * 增加多条索引数据
      *
      * @param documents 待添加文档集合
@@ -49,12 +49,12 @@
      * @return 操作是否成功
      */
     boolean addMulti4VO(List<? extends Object> lists);
-	```
+    ```
 
 + **<a id="delete-api">删除Delete()</a>**:
 	
-	```java
-	  /**
+    ```java
+    /**
      * 删除索引
      *
      * @param sq 删除条件
@@ -69,11 +69,11 @@
      * @return 操作是否成功
      */
     boolean delete(Object object);
-	```
+    ```
 	
 + **<a id="query-api">查询集合Query()</a>**:
 	
-	```java
+    ```java
     /**
      * 查询
      *
@@ -90,11 +90,11 @@
      * @return 查询结果
      */
     <T> List<T> query(Object queryObj, Class<T> clazz);
-	```
+    ```
 	
 + **<a id="count-api">查询数量Count()</a>**:
 	
-	```java
+    ```java
     /**
      * count
      *
@@ -110,11 +110,11 @@
      * @return count
      */
     Long count(Object object);
-	```
+    ```
 	
 + **<a id="sum-api">求和Sum()</a>**:
 	
-	```java
+    ```java
     /**
      * sum
      *
@@ -132,12 +132,12 @@
      * @return sum的结果
      */
     Map<String, Long> sum(Object object, String... fields);
-	```
+    ```
 	
 + **<a id="groupBy-api">分组GroupBy()</a>**:
 	
-	```java
-	  /**
+    ```java
+    /**
      * group by
      *
      * @param solrQuery 查询条件
@@ -154,11 +154,11 @@
      * @return groupby的结果
      */
     Map<String, Long> group(Object object, String field);
-	```
+    ```
 	
 + **<a id="aggregation-api">聚合Aggregation()</a>**:
 	
-	```java
+    ```java
     /**
      * 聚合(min、max、avg、count、sum)目前只支持sum
      *
@@ -178,4 +178,4 @@
      * @return sum的结果
      */
     Map<String, Long> aggregate(AggregateEnum agg, Object object, String... fields);
-	```
+    ```
