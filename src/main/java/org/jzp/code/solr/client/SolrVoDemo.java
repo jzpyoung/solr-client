@@ -14,8 +14,6 @@ import java.util.List;
  */
 public class SolrVoDemo {
 
-    private Integer cardNum;
-
     private String id;
 
     private Integer age;
@@ -43,6 +41,10 @@ public class SolrVoDemo {
 
     @InField(name = "time")
     private List<Date> timeList;
+
+    @DimField
+    @NotInField(name = "code")
+    private List<String> codeList;
 
     @SortField(name = "memberTime", mode = SortField.SortFiledEnum.DESC)
     private String sort1 = "111";
@@ -146,23 +148,30 @@ public class SolrVoDemo {
         this.age = age;
     }
 
-    public int getCardNum() {
-        return cardNum;
+    public List<String> getCodeList() {
+        return codeList;
     }
 
-    public void setCardNum(int cardNum) {
-        this.cardNum = cardNum;
+    public void setCodeList(List<String> codeList) {
+        this.codeList = codeList;
     }
 
     @Override
     public String toString() {
         return "SolrVoDemo{" +
-                "pageSize=" + pageSize +
+                "id='" + id + '\'' +
+                ", age=" + age +
+                ", name='" + name + '\'' +
+                ", pageSize=" + pageSize +
                 ", start=" + start +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", letvUserId='" + letvUserId + '\'' +
-                ", name='" + name + '\'' +
+                ", orderList=" + orderList +
+                ", timeList=" + timeList +
+                ", codeList=" + codeList +
+                ", sort1='" + sort1 + '\'' +
+                ", sort2='" + sort2 + '\'' +
                 '}';
     }
 }

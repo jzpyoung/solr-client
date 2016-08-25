@@ -163,12 +163,4 @@ public class SolrUtils {
         }
         return true;
     }
-
-    public static void main(String[] args) {
-        SolrVoDemo demo = new SolrVoDemo();
-        demo.setCardNum(-1);
-
-        SolrQuery solrQuery = SolrUtils.vo2SolrQuery(demo, OperateEnum.QUERY);
-        System.out.println(solrQuery);
-    }
 }

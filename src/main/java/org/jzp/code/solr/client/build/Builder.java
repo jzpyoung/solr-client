@@ -71,45 +71,48 @@ public abstract class Builder {
      *
      * @param field
      * @param object
-     * @throws IllegalAccessException
      */
-    public abstract void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException;
+    public abstract void buildScope(Field field, Object object, Map<String, Object> map);
 
     /**
      * builder page
      *
      * @param field
      * @param object
-     * @throws IllegalAccessException
      */
-    public abstract void buildPage(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException;
+    public abstract void buildPage(Field field, Object object, OperateEnum operateEnum);
 
     /**
      * builder sort
      *
      * @param field
      * @param object
-     * @throws IllegalAccessException
      */
-    public abstract void buildSort(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException;
+    public abstract void buildSort(Field field, Object object, OperateEnum operateEnum);
 
     /**
      * builder in
      *
      * @param field
      * @param object
-     * @throws IllegalAccessException
      */
-    public abstract void buildIn(Field field, Object object) throws IllegalAccessException;
+    public abstract void buildIn(Field field, Object object);
+
+    /**
+     * builder NotIn
+     *
+     * @param field
+     * @param object
+     */
+    public abstract void buildNotIn(Field field, Object object);
 
     /**
      * builder common
      *
      * @param field
      * @param object
-     * @throws IllegalAccessException
      */
-    public abstract void buildCommon(Field field, Object object) throws IllegalAccessException;
+    public abstract void buildCommon(Field field, Object object);
 
     /**
      * get SolrQuery

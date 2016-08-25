@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 对象转换solr查询条件in参数注解
+ * in参数注解
  *
  * @author jiazhipeng
  * @version 1.0

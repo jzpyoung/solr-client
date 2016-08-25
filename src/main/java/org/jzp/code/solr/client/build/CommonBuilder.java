@@ -32,8 +32,8 @@ public class CommonBuilder extends Builder {
             str.append(SolrConstant.andStr);
         }
 
-        Object scopeStart = buildScopeCond(ScopeEnum.SCOPESTART,field,map);
-        Object scopeEnd = buildScopeCond(ScopeEnum.SCOPEEND,field,map);
+        Object scopeStart = buildScopeCond(ScopeEnum.SCOPESTART, field, map);
+        Object scopeEnd = buildScopeCond(ScopeEnum.SCOPEEND, field, map);
 
         str.append(field.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft + scopeStart + SolrConstant.toStr + scopeEnd + SolrConstant.bracketRight);
         andTime++;
@@ -94,7 +94,7 @@ public class CommonBuilder extends Builder {
                 for (int i = ZeroOneEnum.ZERO.getValue(); i < inlist.size(); i++) {
                     inEach = inlist.get(i);
                     if (i > ZeroOneEnum.ZERO.getValue()) {
-                        inStr = inStr + SolrConstant.orStr;
+                        inStr += SolrConstant.orStr;
                     }
                     if (inEach instanceof Date) {
                         inEach = buildDate(inEach);
@@ -102,6 +102,38 @@ public class CommonBuilder extends Builder {
                     inStr = inStr + inEach;
                 }
                 str.append(field.getAnnotation(InField.class).name() + SolrConstant.colon + SolrConstant.miniBracketLeft + inStr + SolrConstant.miniBracketRight);
+                andTime++;
+            }
+            return;
+        }
+        this.buildNotIn(field, object);
+    }
+
+    @Override
+    public void buildNotIn(Field field, Object object) throws IllegalAccessException {
+        if (field.isAnnotationPresent(NotInField.class)) {
+            List<Object> notInlist = (List) Fields.get(object, field);
+            Object notInEach;
+            String notInStr = SolrConstant.star + SolrConstant.notStr;
+            if (notInlist != null && notInlist.size() > ZeroOneEnum.ZERO.getValue()) {
+                if (andTime != ZeroOneEnum.ZERO.getValue()) {
+                    str.append(SolrConstant.andStr);
+                }
+                for (int i = ZeroOneEnum.ZERO.getValue(); i < notInlist.size(); i++) {
+                    if (field.isAnnotationPresent(DimField.class)) {
+                        notInEach = SolrConstant.star + notInlist.get(i) + SolrConstant.star;
+                    } else {
+                        notInEach = notInlist.get(i);
+                    }
+                    if (i > ZeroOneEnum.ZERO.getValue()) {
+                        notInStr += SolrConstant.notStr;
+                    }
+                    if (notInEach instanceof Date) {
+                        notInEach = buildDate(notInEach);
+                    }
+                    notInStr += notInEach;
+                }
+                str.append(field.getAnnotation(NotInField.class).name() + SolrConstant.colon + SolrConstant.miniBracketLeft + notInStr + SolrConstant.miniBracketRight);
                 andTime++;
             }
             return;
