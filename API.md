@@ -45,6 +45,10 @@
 	    // IN查询，name为solr schema的字段名称，userList为in的范围list
 	    @InField(name = "time")
 	    private List<Date> timeList;
+	    
+	    // NOTIN查询，name为solr schema的字段名称，codeList为notin的范围list
+        @NotInField(name = "code")
+        private List<String> codeList;
 	 
 	    // 排序，name为solr schema的字段名称，mode为操作，DESC代表降序
 	    @SortField(name = "orderTime", mode = SortField.SortFiledEnum.DESC)
