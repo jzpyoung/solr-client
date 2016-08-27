@@ -1,5 +1,6 @@
 package org.jzp.code.solr.client.test;
 
+import com.google.common.collect.Lists;
 import org.jzp.code.solr.client.loadstrategic.RandomLoadBalance;
 import org.apache.solr.client.solrj.SolrServer;
 import org.junit.Assert;
@@ -20,7 +21,7 @@ public class RandomLoadBalanceTest {
     @Test
     public void testSelect() {
         RandomLoadBalance loadBalance = new RandomLoadBalance();
-        List<SolrServer> dataSources = new ArrayList<SolrServer>();
+        List<SolrServer> dataSources = Lists.newArrayList();
         dataSources.add(new MockSolrServer());
         dataSources.add(new MockSolrServer());
         dataSources.add(new MockSolrServer());
@@ -33,7 +34,7 @@ public class RandomLoadBalanceTest {
     @Test(expected = RuntimeException.class)
     public void testSelectWithEmptyDSs() {
         RandomLoadBalance loadBalance = new RandomLoadBalance();
-        List<SolrServer> dataSources = new ArrayList<SolrServer>();
+        List<SolrServer> dataSources = Lists.newArrayList();
         loadBalance.select(dataSources);
     }
 
@@ -47,7 +48,7 @@ public class RandomLoadBalanceTest {
     @Test
     public void testSelectWithOneDS() {
         RandomLoadBalance loadBalance = new RandomLoadBalance();
-        List<SolrServer> dataSources = new ArrayList<SolrServer>();
+        List<SolrServer> dataSources = Lists.newArrayList();
         dataSources.add(new MockSolrServer());
         SolrServer ds = loadBalance.select(dataSources);
         Assert.assertNotNull(ds);

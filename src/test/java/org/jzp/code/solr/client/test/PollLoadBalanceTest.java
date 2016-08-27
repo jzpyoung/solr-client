@@ -1,5 +1,6 @@
 package org.jzp.code.solr.client.test;
 
+import com.google.common.collect.Lists;
 import org.jzp.code.solr.client.loadstrategic.PollLoadBalance;
 import org.apache.solr.client.solrj.SolrServer;
 import org.junit.Assert;
@@ -20,7 +21,7 @@ public class PollLoadBalanceTest {
     @Test
     public void testSelect() {
         PollLoadBalance loadBalance = new PollLoadBalance();
-        List<SolrServer> dataSources = new ArrayList<SolrServer>();
+        List<SolrServer> dataSources = Lists.newArrayList();
         dataSources.add(new MockSolrServer());
         dataSources.add(new MockSolrServer());
         dataSources.add(new MockSolrServer());
@@ -35,7 +36,7 @@ public class PollLoadBalanceTest {
     @Test(expected = RuntimeException.class)
     public void testSelectWithEmptyDSs() {
         PollLoadBalance loadBalance = new PollLoadBalance();
-        List<SolrServer> dataSources = new ArrayList<SolrServer>();
+        List<SolrServer> dataSources = Lists.newArrayList();
         loadBalance.select(dataSources);
     }
 
@@ -49,7 +50,7 @@ public class PollLoadBalanceTest {
     @Test
     public void testSelectWithOneDS() {
         PollLoadBalance loadBalance = new PollLoadBalance();
-        List<SolrServer> dataSources = new ArrayList<SolrServer>();
+        List<SolrServer> dataSources = Lists.newArrayList();
         dataSources.add(new MockSolrServer());
         SolrServer ds = loadBalance.select(dataSources);
         Assert.assertNotNull(ds);
