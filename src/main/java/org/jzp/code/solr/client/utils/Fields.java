@@ -15,7 +15,6 @@ public abstract class Fields {
 
     private static final Unsafe unsafe = getUnsafe();
 
-
     private static Unsafe getUnsafe() {
         try {
             Field f = Unsafe.class.getDeclaredField("theUnsafe");
@@ -69,11 +68,9 @@ public abstract class Fields {
      * @return the field value
      */
     public static Object get(Object target, String name) {
-        try {
-            return get(target, target.getClass().getDeclaredField(name), Object.class);
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
+        GetField getField = new GetField(target.getClass(), name).invoke();
+        Field field = getField.getField();
+        return get(target, field, Object.class);
     }
 
     /**
@@ -117,6 +114,36 @@ public abstract class Fields {
             return (T) unsafe.getObject(target, fieldOffset);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static class GetField {
+        private Class target;
+        private String name;
+        private Field field;
+
+        public GetField(Class target, String name) {
+            this.target = target;
+            this.name = name;
+        }
+
+
+        public Field getField() {
+            return field;
+        }
+
+        public GetField invoke() {
+            try {
+                field = target.getDeclaredField(name);
+            } catch (NoSuchFieldException e) {
+                Class superclass = target.getSuperclass();
+                if (superclass == null) {
+                    throw new RuntimeException(e);
+                }
+                target = superclass;
+                return invoke();
+            }
+            return this;
         }
     }
 }
