@@ -1,12 +1,12 @@
 package org.jzp.code.solr.client.build;
 
+import org.apache.solr.client.solrj.SolrQuery;
 import org.jzp.code.solr.client.annotation.*;
 import org.jzp.code.solr.client.common.constant.SolrConstant;
 import org.jzp.code.solr.client.common.enums.OperateEnum;
 import org.jzp.code.solr.client.common.enums.ScopeEnum;
 import org.jzp.code.solr.client.common.enums.ZeroOneEnum;
 import org.jzp.code.solr.client.utils.Fields;
-import org.apache.solr.client.solrj.SolrQuery;
 
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -27,7 +27,7 @@ public class CommonBuilder extends Builder {
     private int andTime = ZeroOneEnum.ZERO.getValue();
 
     @Override
-    public void buildScope(Field field, Object object, Map<String, Object> map) throws IllegalAccessException {
+    public void buildScope(Field field, Object object, Map<String, Object> map) {
         if (andTime != ZeroOneEnum.ZERO.getValue()) {
             str.append(SolrConstant.andStr);
         }
@@ -40,7 +40,7 @@ public class CommonBuilder extends Builder {
     }
 
     @Override
-    public void buildPage(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
+    public void buildPage(Field field, Object object, OperateEnum operateEnum) {
         if (field.isAnnotationPresent(PageField.class)) {
             if (!OperateEnum.QUERY.equals(operateEnum)) {
                 return;
@@ -62,7 +62,7 @@ public class CommonBuilder extends Builder {
     }
 
     @Override
-    public void buildSort(Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
+    public void buildSort(Field field, Object object, OperateEnum operateEnum) {
         if (field.isAnnotationPresent(SortField.class)) {
             if (!OperateEnum.QUERY.equals(operateEnum)) {
                 return;
@@ -82,7 +82,7 @@ public class CommonBuilder extends Builder {
     }
 
     @Override
-    public void buildIn(Field field, Object object) throws IllegalAccessException {
+    public void buildIn(Field field, Object object) {
         if (field.isAnnotationPresent(InField.class)) {
             List<Object> inlist = (List) Fields.get(object, field);
             Object inEach;
@@ -110,7 +110,7 @@ public class CommonBuilder extends Builder {
     }
 
     @Override
-    public void buildNotIn(Field field, Object object) throws IllegalAccessException {
+    public void buildNotIn(Field field, Object object) {
         if (field.isAnnotationPresent(NotInField.class)) {
             List<Object> notInlist = (List) Fields.get(object, field);
             Object notInEach;
@@ -142,7 +142,7 @@ public class CommonBuilder extends Builder {
     }
 
     @Override
-    public void buildCommon(Field field, Object object) throws IllegalAccessException {
+    public void buildCommon(Field field, Object object) {
         if (andTime != ZeroOneEnum.ZERO.getValue()) {
             str.append(SolrConstant.andStr);
         }

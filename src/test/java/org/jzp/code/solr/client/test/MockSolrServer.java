@@ -8,7 +8,7 @@ import org.apache.solr.common.util.NamedList;
 import java.io.IOException;
 
 /**
- * mockSolrServer方便测试
+ * MockSolrServer
  *
  * @author jiazhipeng
  * @version 1.0

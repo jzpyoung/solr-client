@@ -17,14 +17,14 @@ public class Director {
     /**
      * build scope
      */
-    public void constructScope(Builder bulider, Field field, Object object, Map<String, Object> map) throws IllegalAccessException {
+    public void constructScope(Builder bulider, Field field, Object object, Map<String, Object> map) {
         bulider.buildScope(field, object, map);
     }
 
     /**
      * build other
      */
-    public void constructOther(Builder bulider, Field field, Object object, OperateEnum operateEnum) throws IllegalAccessException {
+    public void constructOther(Builder bulider, Field field, Object object, OperateEnum operateEnum) {
         bulider.buildPage(field, object, operateEnum);
     }
 }
