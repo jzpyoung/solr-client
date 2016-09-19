@@ -41,12 +41,13 @@ public class Director {
             return;
         }
 
-        Object fValue = Fields.get(object, field);
         // null、""、被ignorefield标识的属性忽略
+        Object fValue = Fields.get(object, field);
         if (field.isAnnotationPresent(IgnoreField.class) || (fValue == null && !field.isAnnotationPresent(ScopeField.class)) || "".equals(fValue)) {
             return;
         }
 
+        // scope范围无效忽略
         boolean flag = isInvalidScope(field, fValue, scopeMap);
         if (flag) {
             return;
