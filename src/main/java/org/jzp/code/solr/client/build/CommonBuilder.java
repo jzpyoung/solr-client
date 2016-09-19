@@ -41,104 +41,86 @@ public class CommonBuilder extends Builder {
 
     @Override
     public void buildPage(Field field, Object object, OperateEnum operateEnum) {
-        if (field.isAnnotationPresent(PageField.class)) {
-            if (!OperateEnum.QUERY.equals(operateEnum)) {
-                return;
-            }
-
-            switch (field.getAnnotation(PageField.class).name()) {
-                case PAGESIZE:
-                    solrQuery.setRows(Fields.get(object, field, Integer.class));
-                    break;
-                case START:
-                    solrQuery.setStart(Fields.get(object, field, Integer.class));
-                    break;
-                default:
-                    break;
-            }
+        if (!OperateEnum.QUERY.equals(operateEnum)) {
             return;
         }
-        this.buildSort(field, object, operateEnum);
+
+        switch (field.getAnnotation(PageField.class).name()) {
+            case PAGESIZE:
+                solrQuery.setRows(Fields.get(object, field, Integer.class));
+                break;
+            case START:
+                solrQuery.setStart(Fields.get(object, field, Integer.class));
+                break;
+        }
     }
 
     @Override
     public void buildSort(Field field, Object object, OperateEnum operateEnum) {
-        if (field.isAnnotationPresent(SortField.class)) {
-            if (!OperateEnum.QUERY.equals(operateEnum)) {
-                return;
-            }
-
-            switch (field.getAnnotation(SortField.class).mode()) {
-                case ASC:
-                    solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.asc);
-                    break;
-                case DESC:
-                    solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.desc);
-                    break;
-            }
+        if (!OperateEnum.QUERY.equals(operateEnum)) {
             return;
         }
-        this.buildIn(field, object);
+
+        switch (field.getAnnotation(SortField.class).mode()) {
+            case ASC:
+                solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.asc);
+                break;
+            case DESC:
+                solrQuery.addSort(field.getAnnotation(SortField.class).name(), SolrQuery.ORDER.desc);
+                break;
+        }
     }
 
     @Override
     public void buildIn(Field field, Object object) {
-        if (field.isAnnotationPresent(InField.class)) {
-            List<Object> inlist = (List) Fields.get(object, field);
-            Object inEach;
-            String inStr = "";
-            if (inlist != null && inlist.size() > ZeroOneEnum.ZERO.getValue()) {
-                if (andTime != ZeroOneEnum.ZERO.getValue()) {
-                    str.append(SolrConstant.andStr);
-                }
-                for (int i = ZeroOneEnum.ZERO.getValue(); i < inlist.size(); i++) {
-                    inEach = inlist.get(i);
-                    if (i > ZeroOneEnum.ZERO.getValue()) {
-                        inStr += SolrConstant.orStr;
-                    }
-                    if (inEach instanceof Date) {
-                        inEach = buildDate(inEach);
-                    }
-                    inStr = inStr + inEach;
-                }
-                str.append(field.getAnnotation(InField.class).name() + SolrConstant.colon + SolrConstant.miniBracketLeft + inStr + SolrConstant.miniBracketRight);
-                andTime++;
+        List<Object> inlist = (List) Fields.get(object, field);
+        Object inEach;
+        String inStr = "";
+        if (inlist != null && inlist.size() > ZeroOneEnum.ZERO.getValue()) {
+            if (andTime != ZeroOneEnum.ZERO.getValue()) {
+                str.append(SolrConstant.andStr);
             }
-            return;
+            for (int i = ZeroOneEnum.ZERO.getValue(); i < inlist.size(); i++) {
+                inEach = inlist.get(i);
+                if (i > ZeroOneEnum.ZERO.getValue()) {
+                    inStr += SolrConstant.orStr;
+                }
+                if (inEach instanceof Date) {
+                    inEach = buildDate(inEach);
+                }
+                inStr += inEach;
+            }
+            str.append(field.getAnnotation(InField.class).name() + SolrConstant.colon + SolrConstant.miniBracketLeft + inStr + SolrConstant.miniBracketRight);
+            andTime++;
         }
-        this.buildNotIn(field, object);
     }
 
     @Override
     public void buildNotIn(Field field, Object object) {
-        if (field.isAnnotationPresent(NotInField.class)) {
-            List<Object> notInlist = (List) Fields.get(object, field);
-            Object notInEach;
-            String notInStr = SolrConstant.star + SolrConstant.notStr;
-            if (notInlist != null && notInlist.size() > ZeroOneEnum.ZERO.getValue()) {
-                if (andTime != ZeroOneEnum.ZERO.getValue()) {
-                    str.append(SolrConstant.andStr);
-                }
-                for (int i = ZeroOneEnum.ZERO.getValue(); i < notInlist.size(); i++) {
-                    if (field.isAnnotationPresent(DimField.class)) {
-                        notInEach = SolrConstant.star + notInlist.get(i) + SolrConstant.star;
-                    } else {
-                        notInEach = notInlist.get(i);
-                    }
-                    if (i > ZeroOneEnum.ZERO.getValue()) {
-                        notInStr += SolrConstant.notStr;
-                    }
-                    if (notInEach instanceof Date) {
-                        notInEach = buildDate(notInEach);
-                    }
-                    notInStr += notInEach;
-                }
-                str.append(field.getAnnotation(NotInField.class).name() + SolrConstant.colon + SolrConstant.miniBracketLeft + notInStr + SolrConstant.miniBracketRight);
-                andTime++;
+        List<Object> notInlist = (List) Fields.get(object, field);
+        Object notInEach;
+        String notInStr = SolrConstant.star + SolrConstant.notStr;
+        if (notInlist != null && notInlist.size() > ZeroOneEnum.ZERO.getValue()) {
+            if (andTime != ZeroOneEnum.ZERO.getValue()) {
+                str.append(SolrConstant.andStr);
             }
-            return;
+            for (int i = ZeroOneEnum.ZERO.getValue(); i < notInlist.size(); i++) {
+                if (field.isAnnotationPresent(DimField.class)) {
+                    notInEach = SolrConstant.star + notInlist.get(i) + SolrConstant.star;
+                } else {
+                    notInEach = notInlist.get(i);
+                }
+                if (i > ZeroOneEnum.ZERO.getValue()) {
+                    notInStr += SolrConstant.notStr;
+                }
+                if (notInEach instanceof Date) {
+                    notInEach = buildDate(notInEach);
+                }
+                notInStr += notInEach;
+            }
+            str.append(field.getAnnotation(NotInField.class).name() + SolrConstant.colon + SolrConstant.miniBracketLeft + notInStr + SolrConstant.miniBracketRight);
+            andTime++;
         }
-        this.buildCommon(field, object);
     }
 
     @Override

@@ -1,22 +1,17 @@
 package org.jzp.code.solr.client.utils;
 
-import org.jzp.code.solr.client.SolrVoDemo;
-import org.jzp.code.solr.client.annotation.IgnoreField;
-import org.jzp.code.solr.client.annotation.ScopeField;
-import org.jzp.code.solr.client.build.CommonBuilder;
-import org.jzp.code.solr.client.common.enums.OperateEnum;
-import org.jzp.code.solr.client.common.enums.ScopeEnum;
-import org.jzp.code.solr.client.common.enums.ZeroOneEnum;
-import org.jzp.code.solr.client.exceptions.SolrException;
-import org.jzp.code.solr.client.build.Builder;
-import org.jzp.code.solr.client.build.Director;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import org.jzp.code.solr.client.build.CommonBuilder;
+import org.jzp.code.solr.client.build.Director;
+import org.jzp.code.solr.client.common.enums.OperateEnum;
+import org.jzp.code.solr.client.exceptions.SolrException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * solr工具类
@@ -97,70 +92,16 @@ public class SolrUtils {
      */
     public static SolrQuery vo2SolrQuery(Object object, OperateEnum operateEnum) {
         // 初始化指挥者类
-        Director director = new Director();
-        // 初始化建造者类
-        Builder builder = new CommonBuilder();
+        Director director = new Director(new CommonBuilder(), operateEnum);
         Field[] fields = object.getClass().getDeclaredFields();
-        int modifiers;
-        Object fValue;
-        Map<String, Object> scopeMap = new HashMap<>();
-        scopeMap.put(ScopeEnum.SCOPE.getValue(), ZeroOneEnum.ZERO.getValue());
-        scopeMap.put(ScopeEnum.SCOPESTART.getValue(), null);
-        scopeMap.put(ScopeEnum.SCOPEEND.getValue(), null);
         for (Field field : fields) {
-            modifiers = field.getModifiers();
-            if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
-                continue;
-            }
-
-            fValue = Fields.get(object, field);
-            boolean flag = judgeScopeBothNull(field, fValue, scopeMap);
-
-            // static、final、被ignorefield标识的属性忽略
-            if (field.isAnnotationPresent(IgnoreField.class) || (fValue == null && !field.isAnnotationPresent(ScopeField.class)) || "".equals(fValue) || flag) {
-                continue;
-            }
-
             try {
                 // 指挥者执行builder
-                if (field.isAnnotationPresent(ScopeField.class)) {
-                    director.constructScope(builder, field, object, scopeMap);
-                } else {
-                    director.constructOther(builder, field, object, operateEnum);
-                }
+                director.startBuilder(field, object);
             } catch (Exception e) {
                 throw new SolrException(e);
             }
         }
-
-        return builder.getResult();
-    }
-
-    private static boolean judgeScopeBothNull(Field field, Object fValue, Map<String, Object> scopeMap) {
-        int scope;
-        if (field.isAnnotationPresent(ScopeField.class) && ScopeField.ScopeFiledEnum.GT.equals(field.getAnnotation(ScopeField.class).mode())) {
-            scopeMap.put(ScopeEnum.SCOPESTART.getValue(), fValue);
-            scope = (int) scopeMap.get(ScopeEnum.SCOPE.getValue());
-            scopeMap.put(ScopeEnum.SCOPE.getValue(), ++scope);
-            return judgeScopeBothNullFlag(scopeMap);
-        } else if (field.isAnnotationPresent(ScopeField.class) && ScopeField.ScopeFiledEnum.LT.equals(field.getAnnotation(ScopeField.class).mode())) {
-            scopeMap.put(ScopeEnum.SCOPEEND.getValue(), fValue);
-            scope = (int) scopeMap.get(ScopeEnum.SCOPE.getValue());
-            scopeMap.put(ScopeEnum.SCOPE.getValue(), ++scope);
-            return judgeScopeBothNullFlag(scopeMap);
-        }
-        return false;
-    }
-
-    private static boolean judgeScopeBothNullFlag(Map<String, Object> scopeMap) {
-        if ((int) scopeMap.get(ScopeEnum.SCOPE.getValue()) > ZeroOneEnum.ONE.getValue()) {
-            scopeMap.put(ScopeEnum.SCOPE.getValue(), ZeroOneEnum.ZERO.getValue());
-            if (scopeMap.get(ScopeEnum.SCOPESTART.getValue()) == null && scopeMap.get(ScopeEnum.SCOPEEND.getValue()) == null) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return true;
+        return director.getResult();
     }
 }
