@@ -64,8 +64,6 @@ public class Director {
             builder.buildIn(field, object);
         } else if (field.isAnnotationPresent(NotInField.class)) {
             builder.buildNotIn(field, object);
-        } else if (field.isAnnotationPresent(NotInField.class)) {
-            builder.buildNotIn(field, object);
         } else {
             builder.buildCommon(field, object);
         }
