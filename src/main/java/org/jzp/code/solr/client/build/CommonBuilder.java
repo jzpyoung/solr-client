@@ -20,7 +20,7 @@ import java.util.Map;
  * @version 1.0
  * @date 2016-06-27
  */
-public class CommonBuilder extends Builder {
+public class CommonBuilder extends AbstractBuilderHandle implements Builder {
 
     private SolrQuery solrQuery = new SolrQuery();
     private StringBuilder str = new StringBuilder();
@@ -32,8 +32,8 @@ public class CommonBuilder extends Builder {
             str.append(SolrConstant.andStr);
         }
 
-        Object scopeStart = buildScopeCond(ScopeEnum.SCOPESTART, field, map);
-        Object scopeEnd = buildScopeCond(ScopeEnum.SCOPEEND, field, map);
+        Object scopeStart = handleScopeCond(ScopeEnum.SCOPESTART, field, map);
+        Object scopeEnd = handleScopeCond(ScopeEnum.SCOPEEND, field, map);
 
         str.append(field.getAnnotation(ScopeField.class).name() + SolrConstant.bracketLeft + scopeStart + SolrConstant.toStr + scopeEnd + SolrConstant.bracketRight);
         andTime++;
@@ -86,7 +86,7 @@ public class CommonBuilder extends Builder {
                     inStr += SolrConstant.orStr;
                 }
                 if (inEach instanceof Date) {
-                    inEach = buildDate(inEach);
+                    inEach = handleDate(inEach);
                 }
                 inStr += inEach;
             }
@@ -114,7 +114,7 @@ public class CommonBuilder extends Builder {
                     notInStr += SolrConstant.notStr;
                 }
                 if (notInEach instanceof Date) {
-                    notInEach = buildDate(notInEach);
+                    notInEach = handleDate(notInEach);
                 }
                 notInStr += notInEach;
             }
@@ -132,7 +132,7 @@ public class CommonBuilder extends Builder {
         Object value = Fields.get(object, field);
 
         // 处理负数
-        value = buildNegativeNumber(value, field, object);
+        value = handleNegativeNumber(value, field, object);
 
         if (field.isAnnotationPresent(DimField.class)) {
             str.append(field.getName() + SolrConstant.colon + SolrConstant.star + value + SolrConstant.star);
