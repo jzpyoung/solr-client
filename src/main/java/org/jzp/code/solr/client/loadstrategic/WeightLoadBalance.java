@@ -30,5 +30,4 @@ public class WeightLoadBalance extends AbstractLoadBalance<WeightSolrServer> {
 		Random random = new Random();
 		return server4select.get(random.nextInt(total));
 	}
-
 }

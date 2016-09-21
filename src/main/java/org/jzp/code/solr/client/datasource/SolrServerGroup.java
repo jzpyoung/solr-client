@@ -75,5 +75,4 @@ public class SolrServerGroup{
 	public void setMasterServer(SolrServer masterServer) {
 		this.masterServer = masterServer;
 	}
-	
 }

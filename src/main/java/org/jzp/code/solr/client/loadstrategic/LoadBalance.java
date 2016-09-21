@@ -18,5 +18,4 @@ public interface LoadBalance<S> {
      * @return resource
      */
     S select(List<S> resources);
-
 }

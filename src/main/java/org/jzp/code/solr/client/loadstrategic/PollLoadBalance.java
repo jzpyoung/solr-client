@@ -19,5 +19,4 @@ public class PollLoadBalance extends AbstractLoadBalance<SolrServer> {
 	public SolrServer doSelect(List<SolrServer> resources) {
 		return resources.get(Math.abs(index.getAndIncrement() % resources.size()));
 	}
-
 }

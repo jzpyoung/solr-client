@@ -20,5 +20,4 @@ public enum ZeroOneEnum {
 	public int getValue() {
 		return this.value;
 	}
-
 }

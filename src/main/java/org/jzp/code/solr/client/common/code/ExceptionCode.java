@@ -30,5 +30,4 @@ public enum ExceptionCode {
     public String getMessage() {
         return message;
     }
-
 }

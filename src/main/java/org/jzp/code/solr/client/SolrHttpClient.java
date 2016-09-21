@@ -1,13 +1,6 @@
 package org.jzp.code.solr.client;
 
 import com.google.common.collect.Maps;
-import org.jzp.code.solr.client.common.enums.OperateEnum;
-import org.jzp.code.solr.client.datasource.SolrServerGroup;
-import org.jzp.code.solr.client.exceptions.SolrException;
-import org.jzp.code.solr.client.common.code.ExceptionCode;
-import org.jzp.code.solr.client.common.enums.AggregateEnum;
-import org.jzp.code.solr.client.common.enums.ZeroOneEnum;
-import org.jzp.code.solr.client.utils.SolrUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
@@ -15,6 +8,14 @@ import org.apache.solr.client.solrj.response.*;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.GroupParams;
+import org.jzp.code.solr.client.common.code.ExceptionCode;
+import org.jzp.code.solr.client.common.enums.AggregateEnum;
+import org.jzp.code.solr.client.common.enums.OperateEnum;
+import org.jzp.code.solr.client.common.enums.ZeroOneEnum;
+import org.jzp.code.solr.client.datasource.SolrServerGroup;
+import org.jzp.code.solr.client.exceptions.SolrException;
+import org.jzp.code.solr.client.factory.AggFactory;
+import org.jzp.code.solr.client.utils.SolrUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -202,16 +203,12 @@ public class SolrHttpClient implements SolrClient {
         Map<String, FieldStatsInfo> fieldStatsInfoMap = res.getFieldStatsInfo();
         // stats.field字段设置成什么，这里就获取什么
         FieldStatsInfo fieldStatsInfo;
-        Long result = null;
-        String aggStr;
+        Long result;
         try {
             for (String field : fields) {
                 fieldStatsInfo = fieldStatsInfoMap.get(field);
-                // 获取聚合值，并转换成long
-                if (AggregateEnum.SUM.equals(agg)) {
-                    aggStr = fieldStatsInfo.getSum().toString();
-                    result = Double.valueOf(aggStr).longValue();
-                }
+                // 获取聚合值
+                result = AggFactory.getAggValue(fieldStatsInfo, agg);
                 map.put(field, result);
             }
         } catch (Exception e) {

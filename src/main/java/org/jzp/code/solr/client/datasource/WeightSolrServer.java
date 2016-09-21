@@ -175,5 +175,4 @@ public class WeightSolrServer extends SolrServer{
 	public String toString() {
 		return solrServer.toString();
 	}
-	
 }

@@ -29,5 +29,4 @@ public abstract class AbstractLoadBalance<S> implements LoadBalance<S> {
      * @return resource
      */
     public abstract S doSelect(List<S> resources);
-
 }

@@ -20,6 +20,4 @@ public class RandomLoadBalance extends AbstractLoadBalance<SolrServer> {
 		int index = random.nextInt(resources.size());
 		return resources.get(index);
 	}
-
-
 }
