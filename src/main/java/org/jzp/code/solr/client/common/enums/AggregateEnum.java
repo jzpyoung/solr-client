@@ -9,5 +9,5 @@ package org.jzp.code.solr.client.common.enums;
  */
 public enum AggregateEnum {
 
-    SUM, MAX, MIN, COUNT, MISSING, MEAN, STDDEV
+    SUM, MAX, MIN, AVG, COUNT, MISSING, STDDEV
 }

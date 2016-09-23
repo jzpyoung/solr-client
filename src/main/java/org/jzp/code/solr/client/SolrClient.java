@@ -1,9 +1,9 @@
 package org.jzp.code.solr.client;
 
-import org.jzp.code.solr.client.common.enums.AggregateEnum;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
+import org.jzp.code.solr.client.common.enums.AggregateEnum;
 
 import java.util.List;
 import java.util.Map;
@@ -102,8 +102,8 @@ public interface SolrClient {
      * sum
      *
      * @param sq     查询条件
-     * @param fields 待求和字段
-     * @return sum的结果
+     * @param fields 待操作字段
+     * @return 操作结果
      */
     Map<String, Long> sum(SolrQuery sq, String... fields);
 
@@ -111,10 +111,64 @@ public interface SolrClient {
      * sum
      *
      * @param object 查询条件对象
-     * @param fields 待求和字段
-     * @return sum的结果
+     * @param fields 待操作字段
+     * @return 操作结果
      */
     Map<String, Long> sum(Object object, String... fields);
+
+    /**
+     * min
+     *
+     * @param sq     查询条件
+     * @param fields 待操作字段
+     * @return 操作结果
+     */
+    Map<String, Long> min(SolrQuery sq, String... fields);
+
+    /**
+     * min
+     *
+     * @param object 查询条件对象
+     * @param fields 待操作字段
+     * @return 操作结果
+     */
+    Map<String, Long> min(Object object, String... fields);
+
+    /**
+     * max
+     *
+     * @param sq     查询条件
+     * @param fields 待操作字段
+     * @return 操作结果
+     */
+    Map<String, Long> max(SolrQuery sq, String... fields);
+
+    /**
+     * max
+     *
+     * @param object 查询条件对象
+     * @param fields 待操作字段
+     * @return 操作结果
+     */
+    Map<String, Long> max(Object object, String... fields);
+
+    /**
+     * avg
+     *
+     * @param sq     查询条件
+     * @param fields 待操作字段
+     * @return 操作结果
+     */
+    Map<String, Long> avg(SolrQuery sq, String... fields);
+
+    /**
+     * avg
+     *
+     * @param object 查询条件对象
+     * @param fields 待操作字段
+     * @return 操作结果
+     */
+    Map<String, Long> avg(Object object, String... fields);
 
     /**
      * 聚合(min、max、avg、count、sum)目前只支持sum

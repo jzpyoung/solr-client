@@ -15,58 +15,17 @@ import java.util.Map;
  */
 public interface Builder {
 
-    /**
-     * builder scope
-     *
-     * @param field
-     * @param object
-     */
     void buildScope(Field field, Object object, Map<String, Object> map);
 
-    /**
-     * builder page
-     *
-     * @param field
-     * @param object
-     */
     void buildPage(Field field, Object object, OperateEnum operateEnum);
 
-    /**
-     * builder sort
-     *
-     * @param field
-     * @param object
-     */
     void buildSort(Field field, Object object, OperateEnum operateEnum);
 
-    /**
-     * builder in
-     *
-     * @param field
-     * @param object
-     */
     void buildIn(Field field, Object object);
 
-    /**
-     * builder NotIn
-     *
-     * @param field
-     * @param object
-     */
     void buildNotIn(Field field, Object object);
 
-    /**
-     * builder common
-     *
-     * @param field
-     * @param object
-     */
     void buildCommon(Field field, Object object);
 
-    /**
-     * Get SolrQuery
-     *
-     * @return SolrQuery
-     */
     SolrQuery getResult();
 }

@@ -24,7 +24,7 @@ public class AggFactory {
             case MIN:
                 aggStr = fieldStatsInfo.getMin().toString();
                 break;
-            case MEAN:
+            case AVG:
                 aggStr = fieldStatsInfo.getMean().toString();
                 break;
             case STDDEV:

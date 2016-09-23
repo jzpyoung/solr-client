@@ -153,6 +153,36 @@ public class SolrHttpClient implements SolrClient {
     }
 
     @Override
+    public Map<String, Long> min(SolrQuery sq, String... fields) {
+        return this.aggregate(AggregateEnum.MIN, sq, fields);
+    }
+
+    @Override
+    public Map<String, Long> min(Object object, String... fields) {
+        return this.aggregate(AggregateEnum.MIN, object, fields);
+    }
+
+    @Override
+    public Map<String, Long> max(SolrQuery sq, String... fields) {
+        return this.aggregate(AggregateEnum.MAX, sq, fields);
+    }
+
+    @Override
+    public Map<String, Long> max(Object object, String... fields) {
+        return this.aggregate(AggregateEnum.MAX, object, fields);
+    }
+
+    @Override
+    public Map<String, Long> avg(SolrQuery sq, String... fields) {
+        return this.aggregate(AggregateEnum.AVG, sq, fields);
+    }
+
+    @Override
+    public Map<String, Long> avg(Object object, String... fields) {
+        return this.aggregate(AggregateEnum.AVG, object, fields);
+    }
+
+    @Override
     public boolean delete(String sq) {
         // 根据配置文件策略选取slave dataSource
         SolrServer masterServer = solrServerGroup.getMasterServer();
