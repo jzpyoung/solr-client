@@ -11,15 +11,15 @@
     
 + 已实现的组件:
 
+    + 求和: ``Sum()``
+    + 删除: ``Delete()``
+    + 分组: ``GroupBy()``
+    + 聚合: ``Aggregation()``
+    + 查询集合: ``Query()``
+    + 查询数量: ``Count()``
 	+ 单条添加: ``AddSingle()``
 	+ 批量添加: ``AddMulti()``
-	+ 删除: ``Delete()``
-	+ 查询集合: ``Query()``
-	+ 查询数量: ``Count()``
-	+ 求和: ``Sum()``
-	+ 分组: ``GroupBy()``
-	+ 聚合: ``Aggregation()``
-		
+
 + API文档[这里](API.md)。
  
 + SPRING接入文档[这里](SPRING.md)。

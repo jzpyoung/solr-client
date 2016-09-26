@@ -171,7 +171,7 @@ public interface SolrClient {
     Map<String, Long> avg(Object object, String... fields);
 
     /**
-     * 聚合(min、max、avg、count、sum)目前只支持sum
+     * 聚合(min、max、avg、count、sum)
      *
      * @param agg    聚合操作枚举
      * @param sq     查询条件
@@ -181,7 +181,7 @@ public interface SolrClient {
     Map<String, Long> aggregate(AggregateEnum agg, SolrQuery sq, String... fields);
 
     /**
-     * 聚合(min、max、avg、count、sum)目前只支持sum
+     * 聚合(min、max、avg、count、sum)
      *
      * @param agg    聚合操作枚举
      * @param object 查询条件对象
