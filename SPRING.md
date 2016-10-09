@@ -10,149 +10,149 @@
 
     + 随机策略配置
 
-    ```xml
-    <!-- master，slave数据源组配置 -->
-    <bean id="solrServerGroup" class="com.le.jr.solr.client.datasource.SolrServerGroup" destroy-method="destory">
-       <property name="masterServer">
-          <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
-             <constructor-arg>
-                <value>http://{ip}:{port}/solr/{collection1}</value>
-             </constructor-arg>
-             <property name="connectionTimeout" value="1000" />
-             <property name="soTimeout" value="1500" />
-          </bean>
-       </property>
-       
-       <property name="slaveServerList">
-          <list>
-             <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
-                <constructor-arg>
-                   <value>http://{ip}:{port}/solr/{collection1}</value>
-                </constructor-arg>
-                <property name="connectionTimeout" value="1000" />
-                <property name="soTimeout" value="1500" />
-             </bean>
-             <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
-                <constructor-arg>
-                   <value>http://{ip}:{port}/solr/{collection1}</value>
-                </constructor-arg>
-                <property name="connectionTimeout" value="1000" />
-                <property name="soTimeout" value="1500" />
-             </bean>
-          </list>
-       </property>
-       
-       <property name="loadBalance">
-          <bean class="com.le.jr.solr.client.loadstrategic.RandomLoadBalance" />
-       </property>
-    </bean>
-    
-    <bean id="solrClient" class="com.le.jr.solr.client.SolrHttpClient">
-       <property name="solrServerGroup" ref="solrServerGroup" />
-    </bean>
-    ```
+        ```xml
+        <!-- master，slave数据源组配置 -->
+        <bean id="solrServerGroup" class="com.le.jr.solr.client.datasource.SolrServerGroup" destroy-method="destory">
+           <property name="masterServer">
+              <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+                 <constructor-arg>
+                    <value>http://{ip}:{port}/solr/{collection1}</value>
+                 </constructor-arg>
+                 <property name="connectionTimeout" value="1000" />
+                 <property name="soTimeout" value="1500" />
+              </bean>
+           </property>
+           
+           <property name="slaveServerList">
+              <list>
+                 <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+                    <constructor-arg>
+                       <value>http://{ip}:{port}/solr/{collection1}</value>
+                    </constructor-arg>
+                    <property name="connectionTimeout" value="1000" />
+                    <property name="soTimeout" value="1500" />
+                 </bean>
+                 <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+                    <constructor-arg>
+                       <value>http://{ip}:{port}/solr/{collection1}</value>
+                    </constructor-arg>
+                    <property name="connectionTimeout" value="1000" />
+                    <property name="soTimeout" value="1500" />
+                 </bean>
+              </list>
+           </property>
+           
+           <property name="loadBalance">
+              <bean class="com.le.jr.solr.client.loadstrategic.RandomLoadBalance" />
+           </property>
+        </bean>
+        
+        <bean id="solrClient" class="com.le.jr.solr.client.SolrHttpClient">
+           <property name="solrServerGroup" ref="solrServerGroup" />
+        </bean>
+        ```
 
     + 轮询策略配置
 
-    ```xml
-    <!-- master，slave数据源组配置 -->
-    <bean id="solrServerGroup" class="com.le.jr.solr.client.datasource.SolrServerGroup" destroy-method="destory">
-       <property name="masterServer">
-          <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
-             <constructor-arg>
-                <value>http://{ip}:{port}/solr/{collection1}</value>
-             </constructor-arg>
-             <property name="connectionTimeout" value="1000" />
-             <property name="soTimeout" value="1500" />
-          </bean>
-       </property>
-       
-       <property name="slaveServerList">
-          <list>
-             <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
-                <constructor-arg>
-                   <value>http://{ip}:{port}/solr/{collection1}</value>
-                </constructor-arg>
-                <property name="connectionTimeout" value="1000" />
-                <property name="soTimeout" value="1500" />
-             </bean>
-             <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
-                <constructor-arg>
-                   <value>http://{ip}:{port}/solr/{collection1}</value>
-                </constructor-arg>
-                <property name="connectionTimeout" value="1000" />
-                <property name="soTimeout" value="1500" />
-             </bean>
-          </list>
-       </property>
-       
-       <property name="loadBalance">
-          <bean class="com.le.jr.solr.client.loadstrategic.PollLoadBalance" />
-       </property>
-    </bean>
-    
-    <bean id="solrClient" class="com.le.jr.solr.client.SolrHttpClient">
-       <property name="solrServerGroup" ref="solrServerGroup" />
-    </bean>
-    ```
+        ```xml
+        <!-- master，slave数据源组配置 -->
+        <bean id="solrServerGroup" class="com.le.jr.solr.client.datasource.SolrServerGroup" destroy-method="destory">
+           <property name="masterServer">
+              <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+                 <constructor-arg>
+                    <value>http://{ip}:{port}/solr/{collection1}</value>
+                 </constructor-arg>
+                 <property name="connectionTimeout" value="1000" />
+                 <property name="soTimeout" value="1500" />
+              </bean>
+           </property>
+           
+           <property name="slaveServerList">
+              <list>
+                 <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+                    <constructor-arg>
+                       <value>http://{ip}:{port}/solr/{collection1}</value>
+                    </constructor-arg>
+                    <property name="connectionTimeout" value="1000" />
+                    <property name="soTimeout" value="1500" />
+                 </bean>
+                 <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+                    <constructor-arg>
+                       <value>http://{ip}:{port}/solr/{collection1}</value>
+                    </constructor-arg>
+                    <property name="connectionTimeout" value="1000" />
+                    <property name="soTimeout" value="1500" />
+                 </bean>
+              </list>
+           </property>
+           
+           <property name="loadBalance">
+              <bean class="com.le.jr.solr.client.loadstrategic.PollLoadBalance" />
+           </property>
+        </bean>
+        
+        <bean id="solrClient" class="com.le.jr.solr.client.SolrHttpClient">
+           <property name="solrServerGroup" ref="solrServerGroup" />
+        </bean>
+        ```
 
     + 权重策略配置
     
-    ```xml
-    <!-- master，slave数据源组配置 -->
-    <bean id="solrServerGroup" class="com.le.jr.solr.client.datasource.SolrServerGroup" destroy-method="destory">
-       <property name="masterServer">
-          <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
-             <constructor-arg>
-                <value>http://{ip}:{port}/solr/{collection1}</value>
-             </constructor-arg>
-             <property name="connectionTimeout" value="1000" />
-             <property name="soTimeout" value="1500" />
-          </bean>
-       </property>
-       
-       <property name="slaveServerList">
-          <list>
-            <bean class="com.le.jr.solr.client.datasource.WeightSolrServer">
-                <constructor-arg index="0">
-                    <value>3</value>
-                </constructor-arg>
-                <constructor-arg index="1">
-                    <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
-                        <constructor-arg>
-                            <value>http://{ip}:{port}/solr/{collection1}</value>
-                        </constructor-arg>
-                        <property name="connectionTimeout" value="1000" />
-                        <property name="soTimeout" value="1500" />
-                    </bean>
-                </constructor-arg>
-            </bean>
-            <bean class="com.le.jr.solr.client.datasource.WeightSolrServer">
-                <constructor-arg index="0">
-                    <value>7</value>
-                </constructor-arg>
-                <constructor-arg index="1">
-                    <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
-                        <constructor-arg>
-                            <value>http://{ip}:{port}/solr/{collection1}</value>
-                        </constructor-arg>
-                        <property name="connectionTimeout" value="1000" />
-                        <property name="soTimeout" value="1500" />
-                    </bean>
-                </constructor-arg>
-            </bean>
-          </list>
-       </property>
-       
-       <property name="loadBalance">
-          <bean class="com.le.jr.solr.client.loadstrategic.WeightLoadBalance" />
-       </property>
-    </bean>
-    
-    <bean id="solrClient" class="com.le.jr.solr.client.SolrHttpClient">
-       <property name="solrServerGroup" ref="solrServerGroup" />
-    </bean>
-    ```
+        ```xml
+        <!-- master，slave数据源组配置 -->
+        <bean id="solrServerGroup" class="com.le.jr.solr.client.datasource.SolrServerGroup" destroy-method="destory">
+           <property name="masterServer">
+              <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+                 <constructor-arg>
+                    <value>http://{ip}:{port}/solr/{collection1}</value>
+                 </constructor-arg>
+                 <property name="connectionTimeout" value="1000" />
+                 <property name="soTimeout" value="1500" />
+              </bean>
+           </property>
+           
+           <property name="slaveServerList">
+              <list>
+                <bean class="com.le.jr.solr.client.datasource.WeightSolrServer">
+                    <constructor-arg index="0">
+                        <value>3</value>
+                    </constructor-arg>
+                    <constructor-arg index="1">
+                        <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+                            <constructor-arg>
+                                <value>http://{ip}:{port}/solr/{collection1}</value>
+                            </constructor-arg>
+                            <property name="connectionTimeout" value="1000" />
+                            <property name="soTimeout" value="1500" />
+                        </bean>
+                    </constructor-arg>
+                </bean>
+                <bean class="com.le.jr.solr.client.datasource.WeightSolrServer">
+                    <constructor-arg index="0">
+                        <value>7</value>
+                    </constructor-arg>
+                    <constructor-arg index="1">
+                        <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+                            <constructor-arg>
+                                <value>http://{ip}:{port}/solr/{collection1}</value>
+                            </constructor-arg>
+                            <property name="connectionTimeout" value="1000" />
+                            <property name="soTimeout" value="1500" />
+                        </bean>
+                    </constructor-arg>
+                </bean>
+              </list>
+           </property>
+           
+           <property name="loadBalance">
+              <bean class="com.le.jr.solr.client.loadstrategic.WeightLoadBalance" />
+           </property>
+        </bean>
+        
+        <bean id="solrClient" class="com.le.jr.solr.client.SolrHttpClient">
+           <property name="solrServerGroup" ref="solrServerGroup" />
+        </bean>
+        ```
 
 + 自动提交设置：
 
