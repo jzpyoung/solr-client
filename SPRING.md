@@ -12,7 +12,7 @@
 
         ```xml
         <!-- master，slave数据源组配置 -->
-        <bean id="solrServerGroup" class="com.le.jr.solr.client.datasource.SolrServerGroup" destroy-method="destory">
+        <bean id="solrServerGroup" class="org.jzp.code.solr.client.datasource.SolrServerGroup" destroy-method="destory">
            <property name="masterServer">
               <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
                  <constructor-arg>
@@ -43,11 +43,11 @@
            </property>
            
            <property name="loadBalance">
-              <bean class="com.le.jr.solr.client.loadstrategic.RandomLoadBalance" />
+              <bean class="org.jzp.code.solr.client.loadstrategic.RandomLoadBalance" />
            </property>
         </bean>
         
-        <bean id="solrClient" class="com.le.jr.solr.client.SolrHttpClient">
+        <bean id="solrClient" class="org.jzp.code.solr.client.SolrHttpClient">
            <property name="solrServerGroup" ref="solrServerGroup" />
         </bean>
         ```
@@ -56,7 +56,7 @@
 
         ```xml
         <!-- master，slave数据源组配置 -->
-        <bean id="solrServerGroup" class="com.le.jr.solr.client.datasource.SolrServerGroup" destroy-method="destory">
+        <bean id="solrServerGroup" class="org.jzp.code.solr.client.datasource.SolrServerGroup" destroy-method="destory">
            <property name="masterServer">
               <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
                  <constructor-arg>
@@ -87,11 +87,11 @@
            </property>
            
            <property name="loadBalance">
-              <bean class="com.le.jr.solr.client.loadstrategic.PollLoadBalance" />
+              <bean class="org.jzp.code.solr.client.loadstrategic.PollLoadBalance" />
            </property>
         </bean>
         
-        <bean id="solrClient" class="com.le.jr.solr.client.SolrHttpClient">
+        <bean id="solrClient" class="org.jzp.code.solr.client.SolrHttpClient">
            <property name="solrServerGroup" ref="solrServerGroup" />
         </bean>
         ```
@@ -100,7 +100,7 @@
     
         ```xml
         <!-- master，slave数据源组配置 -->
-        <bean id="solrServerGroup" class="com.le.jr.solr.client.datasource.SolrServerGroup" destroy-method="destory">
+        <bean id="solrServerGroup" class="org.jzp.code.solr.client.datasource.SolrServerGroup" destroy-method="destory">
            <property name="masterServer">
               <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
                  <constructor-arg>
@@ -113,7 +113,7 @@
            
            <property name="slaveServerList">
               <list>
-                <bean class="com.le.jr.solr.client.datasource.WeightSolrServer">
+                <bean class="org.jzp.code.solr.client.datasource.WeightSolrServer">
                     <constructor-arg index="0">
                         <value>3</value>
                     </constructor-arg>
@@ -127,7 +127,7 @@
                         </bean>
                     </constructor-arg>
                 </bean>
-                <bean class="com.le.jr.solr.client.datasource.WeightSolrServer">
+                <bean class="org.jzp.code.solr.client.datasource.WeightSolrServer">
                     <constructor-arg index="0">
                         <value>7</value>
                     </constructor-arg>
@@ -145,11 +145,11 @@
            </property>
            
            <property name="loadBalance">
-              <bean class="com.le.jr.solr.client.loadstrategic.WeightLoadBalance" />
+              <bean class="org.jzp.code.solr.client.loadstrategic.WeightLoadBalance" />
            </property>
         </bean>
         
-        <bean id="solrClient" class="com.le.jr.solr.client.SolrHttpClient">
+        <bean id="solrClient" class="org.jzp.code.solr.client.SolrHttpClient">
            <property name="solrServerGroup" ref="solrServerGroup" />
         </bean>
         ```
@@ -160,7 +160,7 @@
     注意：如果设置autoCommit为true，则在solr里面的数据会有延迟，延迟的时间视solrconfig.xml里面的配置决定。
 
     ```xml
-    <bean id="solrClient" class="com.le.jr.solr.client.SolrHttpClient">
+    <bean id="solrClient" class="org.jzp.code.solr.client.SolrHttpClient">
         <property name="solrServerGroup" ref="solrServerGroup" />
         <property name="autoCommit" value="true" />
     </bean>

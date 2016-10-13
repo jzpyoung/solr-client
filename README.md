@@ -5,7 +5,7 @@
     <dependency>
         <groupId>org.jzp.code</groupId>
         <artifactId>solr-client</artifactId>
-        <version>1.0.5</version>
+        <version>${version}</version>
     </dependency>
     ```
     
