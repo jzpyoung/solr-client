@@ -18,8 +18,8 @@
                  <constructor-arg>
                     <value>http://{ip}:{port}/solr/{collection1}</value>
                  </constructor-arg>
-                 <property name="connectionTimeout" value="1000" />
-                 <property name="soTimeout" value="1500" />
+                 <property name="connectionTimeout" value="3000" />
+                 <property name="soTimeout" value="3000" />
               </bean>
            </property>
            
@@ -29,15 +29,15 @@
                     <constructor-arg>
                        <value>http://{ip}:{port}/solr/{collection1}</value>
                     </constructor-arg>
-                    <property name="connectionTimeout" value="1000" />
-                    <property name="soTimeout" value="1500" />
+                    <property name="connectionTimeout" value="3000" />
+                    <property name="soTimeout" value="3000" />
                  </bean>
                  <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
                     <constructor-arg>
                        <value>http://{ip}:{port}/solr/{collection1}</value>
                     </constructor-arg>
-                    <property name="connectionTimeout" value="1000" />
-                    <property name="soTimeout" value="1500" />
+                    <property name="connectionTimeout" value="3000" />
+                    <property name="soTimeout" value="3000" />
                  </bean>
               </list>
            </property>
@@ -62,8 +62,8 @@
                  <constructor-arg>
                     <value>http://{ip}:{port}/solr/{collection1}</value>
                  </constructor-arg>
-                 <property name="connectionTimeout" value="1000" />
-                 <property name="soTimeout" value="1500" />
+                 <property name="connectionTimeout" value="3000" />
+                 <property name="soTimeout" value="3000" />
               </bean>
            </property>
            
@@ -73,15 +73,15 @@
                     <constructor-arg>
                        <value>http://{ip}:{port}/solr/{collection1}</value>
                     </constructor-arg>
-                    <property name="connectionTimeout" value="1000" />
-                    <property name="soTimeout" value="1500" />
+                    <property name="connectionTimeout" value="3000" />
+                    <property name="soTimeout" value="3000" />
                  </bean>
                  <bean class="org.apache.solr.client.solrj.impl.HttpSolrServer">
                     <constructor-arg>
                        <value>http://{ip}:{port}/solr/{collection1}</value>
                     </constructor-arg>
-                    <property name="connectionTimeout" value="1000" />
-                    <property name="soTimeout" value="1500" />
+                    <property name="connectionTimeout" value="3000" />
+                    <property name="soTimeout" value="3000" />
                  </bean>
               </list>
            </property>
@@ -106,8 +106,8 @@
                  <constructor-arg>
                     <value>http://{ip}:{port}/solr/{collection1}</value>
                  </constructor-arg>
-                 <property name="connectionTimeout" value="1000" />
-                 <property name="soTimeout" value="1500" />
+                 <property name="connectionTimeout" value="3000" />
+                 <property name="soTimeout" value="3000" />
               </bean>
            </property>
            
@@ -122,8 +122,8 @@
                             <constructor-arg>
                                 <value>http://{ip}:{port}/solr/{collection1}</value>
                             </constructor-arg>
-                            <property name="connectionTimeout" value="1000" />
-                            <property name="soTimeout" value="1500" />
+                            <property name="connectionTimeout" value="3000" />
+                            <property name="soTimeout" value="3000" />
                         </bean>
                     </constructor-arg>
                 </bean>
@@ -136,8 +136,8 @@
                             <constructor-arg>
                                 <value>http://{ip}:{port}/solr/{collection1}</value>
                             </constructor-arg>
-                            <property name="connectionTimeout" value="1000" />
-                            <property name="soTimeout" value="1500" />
+                            <property name="connectionTimeout" value="3000" />
+                            <property name="soTimeout" value="3000" />
                         </bean>
                     </constructor-arg>
                 </bean>
