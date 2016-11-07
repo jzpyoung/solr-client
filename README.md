@@ -8,6 +8,10 @@
         <version>${version}</version>
     </dependency>
     ```
+
++ Master-Slave架构图：
+    
+    ![](flow.png)
     
 + 已实现的组件:
 
