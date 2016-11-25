@@ -27,7 +27,5 @@ public class MockSolrServer extends SolrServer {
     @Override
     public void shutdown() {
         // TODO Auto-generated method stub
-
     }
-
 }

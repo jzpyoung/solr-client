@@ -53,5 +53,4 @@ public class RandomLoadBalanceTest {
         SolrServer ds = loadBalance.select(dataSources);
         Assert.assertNotNull(ds);
     }
-
 }

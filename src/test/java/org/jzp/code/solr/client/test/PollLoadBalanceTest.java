@@ -55,5 +55,4 @@ public class PollLoadBalanceTest {
         SolrServer ds = loadBalance.select(dataSources);
         Assert.assertNotNull(ds);
     }
-
 }

@@ -51,5 +51,4 @@ public class WeightLoadBalanceTest {
         SolrServer ds = loadBalance.select(dataSources);
         Assert.assertNotNull(ds);
     }
-
 }
