@@ -20,12 +20,12 @@ public class MockSolrServer extends SolrServer {
 
     @Override
     public NamedList<Object> request(SolrRequest arg0) throws SolrServerException, IOException {
-        // TODO Auto-generated method stub
+        // TODO
         return null;
     }
 
     @Override
     public void shutdown() {
-        // TODO Auto-generated method stub
+        // TODO
     }
 }

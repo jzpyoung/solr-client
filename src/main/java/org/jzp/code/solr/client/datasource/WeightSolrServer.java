@@ -1,9 +1,5 @@
 package org.jzp.code.solr.client.datasource;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.SolrServer;
@@ -17,6 +13,10 @@ import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.common.util.NamedList;
 
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * 扩展SolrServer类，适用于权重策略类（代理SolrServer类）
  *
@@ -24,155 +24,158 @@ import org.apache.solr.common.util.NamedList;
  * @version 1.0
  * @date 2016-03-30
  */
-public class WeightSolrServer extends SolrServer{
-	
-	private static final long serialVersionUID = 1L;
-	
-	private int weight; //权重值
-	
-	private SolrServer solrServer; //代理solrServer对象
-	
-	public WeightSolrServer() {
-	}
-	
-	public WeightSolrServer(int weight, SolrServer solrServer) {
-		super();
-		this.weight = weight;
-		this.solrServer = solrServer;
-	}
+public class WeightSolrServer extends SolrServer {
 
-	public int getWeight() {
-		return weight;
-	}
-	public void setWeight(int weight) {
-		this.weight = weight;
-	}
-	
-	/**
-	 * solrServer的代理方法
-	 */
-	public UpdateResponse add(Collection<SolrInputDocument> docs, int commitWithinMs) throws SolrServerException, IOException {
-		return solrServer.add(docs, commitWithinMs);
-	}
+    private static final long serialVersionUID = 1L;
 
-	public UpdateResponse add(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
-		return solrServer.add(docs);
-	}
+    // 权重值
+    private int weight;
 
-	public UpdateResponse add(SolrInputDocument doc, int commitWithinMs) throws SolrServerException, IOException {
-		return solrServer.add(doc, commitWithinMs);
-	}
+    // 代理SolrServer对象
+    private SolrServer solrServer;
 
-	public UpdateResponse add(SolrInputDocument doc) throws SolrServerException, IOException {
-		return solrServer.add(doc);
-	}
+    public WeightSolrServer() {
+    }
 
-	public UpdateResponse addBean(Object obj, int commitWithinMs) throws IOException, SolrServerException {
-		return solrServer.addBean(obj, commitWithinMs);
-	}
+    public WeightSolrServer(int weight, SolrServer solrServer) {
+        super();
+        this.weight = weight;
+        this.solrServer = solrServer;
+    }
 
-	public UpdateResponse addBean(Object obj) throws IOException, SolrServerException {
-		return solrServer.addBean(obj);
-	}
+    public int getWeight() {
+        return weight;
+    }
 
-	public UpdateResponse addBeans(Collection<?> arg0, int arg1) throws SolrServerException, IOException {
-		return solrServer.addBeans(arg0, arg1);
-	}
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
 
-	public UpdateResponse addBeans(Collection<?> beans) throws SolrServerException, IOException {
-		return solrServer.addBeans(beans);
-	}
+    /**
+     * solrServer的代理方法
+     */
+    public UpdateResponse add(Collection<SolrInputDocument> docs, int commitWithinMs) throws SolrServerException, IOException {
+        return solrServer.add(docs, commitWithinMs);
+    }
 
-	public UpdateResponse commit() throws SolrServerException, IOException {
-		return solrServer.commit();
-	}
+    public UpdateResponse add(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
+        return solrServer.add(docs);
+    }
 
-	public UpdateResponse commit(boolean waitFlush, boolean waitSearcher, boolean softCommit) throws SolrServerException, IOException {
-		return solrServer.commit(waitFlush, waitSearcher, softCommit);
-	}
+    public UpdateResponse add(SolrInputDocument doc, int commitWithinMs) throws SolrServerException, IOException {
+        return solrServer.add(doc, commitWithinMs);
+    }
 
-	public UpdateResponse commit(boolean waitFlush, boolean waitSearcher) throws SolrServerException, IOException {
-		return solrServer.commit(waitFlush, waitSearcher);
-	}
+    public UpdateResponse add(SolrInputDocument doc) throws SolrServerException, IOException {
+        return solrServer.add(doc);
+    }
 
-	public UpdateResponse deleteById(List<String> ids, int commitWithinMs) throws SolrServerException, IOException {
-		return solrServer.deleteById(ids, commitWithinMs);
-	}
+    public UpdateResponse addBean(Object obj, int commitWithinMs) throws IOException, SolrServerException {
+        return solrServer.addBean(obj, commitWithinMs);
+    }
 
-	public UpdateResponse deleteById(List<String> ids) throws SolrServerException, IOException {
-		return solrServer.deleteById(ids);
-	}
+    public UpdateResponse addBean(Object obj) throws IOException, SolrServerException {
+        return solrServer.addBean(obj);
+    }
 
-	public UpdateResponse deleteById(String id, int commitWithinMs) throws SolrServerException, IOException {
-		return solrServer.deleteById(id, commitWithinMs);
-	}
+    public UpdateResponse addBeans(Collection<?> arg0, int arg1) throws SolrServerException, IOException {
+        return solrServer.addBeans(arg0, arg1);
+    }
 
-	public UpdateResponse deleteById(String id) throws SolrServerException, IOException {
-		return solrServer.deleteById(id);
-	}
+    public UpdateResponse addBeans(Collection<?> beans) throws SolrServerException, IOException {
+        return solrServer.addBeans(beans);
+    }
 
-	public UpdateResponse deleteByQuery(String query, int commitWithinMs) throws SolrServerException, IOException {
-		return solrServer.deleteByQuery(query, commitWithinMs);
-	}
+    public UpdateResponse commit() throws SolrServerException, IOException {
+        return solrServer.commit();
+    }
 
-	public UpdateResponse deleteByQuery(String query) throws SolrServerException, IOException {
-		return solrServer.deleteByQuery(query);
-	}
+    public UpdateResponse commit(boolean waitFlush, boolean waitSearcher, boolean softCommit) throws SolrServerException, IOException {
+        return solrServer.commit(waitFlush, waitSearcher, softCommit);
+    }
 
-	public boolean equals(Object obj) {
-		return solrServer.equals(obj);
-	}
+    public UpdateResponse commit(boolean waitFlush, boolean waitSearcher) throws SolrServerException, IOException {
+        return solrServer.commit(waitFlush, waitSearcher);
+    }
 
-	public DocumentObjectBinder getBinder() {
-		return solrServer.getBinder();
-	}
+    public UpdateResponse deleteById(List<String> ids, int commitWithinMs) throws SolrServerException, IOException {
+        return solrServer.deleteById(ids, commitWithinMs);
+    }
 
-	public int hashCode() {
-		return solrServer.hashCode();
-	}
+    public UpdateResponse deleteById(List<String> ids) throws SolrServerException, IOException {
+        return solrServer.deleteById(ids);
+    }
 
-	public UpdateResponse optimize() throws SolrServerException, IOException {
-		return solrServer.optimize();
-	}
+    public UpdateResponse deleteById(String id, int commitWithinMs) throws SolrServerException, IOException {
+        return solrServer.deleteById(id, commitWithinMs);
+    }
 
-	public UpdateResponse optimize(boolean waitFlush, boolean waitSearcher, int maxSegments) throws SolrServerException, IOException {
-		return solrServer.optimize(waitFlush, waitSearcher, maxSegments);
-	}
+    public UpdateResponse deleteById(String id) throws SolrServerException, IOException {
+        return solrServer.deleteById(id);
+    }
 
-	public UpdateResponse optimize(boolean waitFlush, boolean waitSearcher) throws SolrServerException, IOException {
-		return solrServer.optimize(waitFlush, waitSearcher);
-	}
+    public UpdateResponse deleteByQuery(String query, int commitWithinMs) throws SolrServerException, IOException {
+        return solrServer.deleteByQuery(query, commitWithinMs);
+    }
 
-	public SolrPingResponse ping() throws SolrServerException, IOException {
-		return solrServer.ping();
-	}
+    public UpdateResponse deleteByQuery(String query) throws SolrServerException, IOException {
+        return solrServer.deleteByQuery(query);
+    }
 
-	public QueryResponse query(SolrParams params, METHOD method) throws SolrServerException {
-		return solrServer.query(params, method);
-	}
+    public boolean equals(Object obj) {
+        return solrServer.equals(obj);
+    }
 
-	public QueryResponse query(SolrParams params) throws SolrServerException {
-		return solrServer.query(params);
-	}
+    public DocumentObjectBinder getBinder() {
+        return solrServer.getBinder();
+    }
 
-	public QueryResponse queryAndStreamResponse(SolrParams params, StreamingResponseCallback callback) throws SolrServerException,
-			IOException {
-		return solrServer.queryAndStreamResponse(params, callback);
-	}
+    public int hashCode() {
+        return solrServer.hashCode();
+    }
 
-	public NamedList<Object> request(SolrRequest arg0) throws SolrServerException, IOException {
-		return solrServer.request(arg0);
-	}
+    public UpdateResponse optimize() throws SolrServerException, IOException {
+        return solrServer.optimize();
+    }
 
-	public UpdateResponse rollback() throws SolrServerException, IOException {
-		return solrServer.rollback();
-	}
+    public UpdateResponse optimize(boolean waitFlush, boolean waitSearcher, int maxSegments) throws SolrServerException, IOException {
+        return solrServer.optimize(waitFlush, waitSearcher, maxSegments);
+    }
 
-	public void shutdown() {
-		solrServer.shutdown();
-	}
+    public UpdateResponse optimize(boolean waitFlush, boolean waitSearcher) throws SolrServerException, IOException {
+        return solrServer.optimize(waitFlush, waitSearcher);
+    }
 
-	public String toString() {
-		return solrServer.toString();
-	}
+    public SolrPingResponse ping() throws SolrServerException, IOException {
+        return solrServer.ping();
+    }
+
+    public QueryResponse query(SolrParams params, METHOD method) throws SolrServerException {
+        return solrServer.query(params, method);
+    }
+
+    public QueryResponse query(SolrParams params) throws SolrServerException {
+        return solrServer.query(params);
+    }
+
+    public QueryResponse queryAndStreamResponse(SolrParams params, StreamingResponseCallback callback) throws SolrServerException,
+            IOException {
+        return solrServer.queryAndStreamResponse(params, callback);
+    }
+
+    public NamedList<Object> request(SolrRequest arg0) throws SolrServerException, IOException {
+        return solrServer.request(arg0);
+    }
+
+    public UpdateResponse rollback() throws SolrServerException, IOException {
+        return solrServer.rollback();
+    }
+
+    public void shutdown() {
+        solrServer.shutdown();
+    }
+
+    public String toString() {
+        return solrServer.toString();
+    }
 }
