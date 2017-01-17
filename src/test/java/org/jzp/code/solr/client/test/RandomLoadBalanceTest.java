@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * RandomLoadBalance测试类。
+ * RandomLoadBalance测试类
  *
  * @author jiazhipeng
  * @version 1.0

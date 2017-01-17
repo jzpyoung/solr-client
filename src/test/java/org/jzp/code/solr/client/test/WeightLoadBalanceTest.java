@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * WeightLoadBalance测试类。
+ * WeightLoadBalance测试类
  *
  * @author jiazhipeng
  * @version 1.0

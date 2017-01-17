@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * PollLoadBalance测试类。
+ * PollLoadBalance测试类
  *
  * @author jiazhipeng
  * @version 1.0
