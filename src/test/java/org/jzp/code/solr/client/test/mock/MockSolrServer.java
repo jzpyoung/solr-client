@@ -1,4 +1,4 @@
-package org.jzp.code.solr.client.test;
+package org.jzp.code.solr.client.test.mock;
 
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServer;

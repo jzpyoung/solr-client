@@ -6,8 +6,8 @@ import org.jzp.code.solr.client.datasource.WeightSolrServer;
 import org.apache.solr.client.solrj.SolrServer;
 import org.junit.Assert;
 import org.junit.Test;
+import org.jzp.code.solr.client.test.mock.MockSolrServer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
