@@ -11,20 +11,18 @@ package org.jzp.code.solr.client.common.code;
  */
 public enum ExceptionCode {
 
-    SOLR_AGGREGATEFIELDISNULL_EXCEPTION(10000, "聚合字段不能为null"),
+    SOLR_AGGREGATEFIELDISNULL_EXCEPTION(10000, "aggregate field not null", "聚合字段不能为null"),
 
-    SOLR_AGGREGATEFAILED_EXCEPTION(10001, "聚合失败异常,聚合字段必须为solr中的存储字段");
+    SOLR_AGGREGATEFAILED_EXCEPTION(10001, "aggregate field must be stored in solr field", "聚合失败异常,聚合字段必须为solr中的存储字段");
 
     private int value;
     private String message;
+    private String desc;
 
-    ExceptionCode(int value, String message) {
+    ExceptionCode(int value, String message, String desc) {
         this.value = value;
         this.message = message;
-    }
-
-    public int getValue() {
-        return value;
+        this.desc = desc;
     }
 
     public String getMessage() {
